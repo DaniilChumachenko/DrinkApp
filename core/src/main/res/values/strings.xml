@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">core</string>
+    <string name="error_something_went_wrong">something went wrong</string>
+    <string name="error_slow_or_no_internet_connection">slow or no internet connection</string>
+    <string name="core_title">DrinksApp</string>
+    <string name="empty_try_looking_for_something_else">Empty! \nTry looking for something else!</string>
+</resources>

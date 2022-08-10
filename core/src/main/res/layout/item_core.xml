@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="10dp"
+    android:elevation="7dp"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_margin="15dp"
+        android:layout_height="match_parent"
+        tools:ignore="ExtraText">
+
+        <ImageView
+            android:id="@+id/drinkImage"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/drinkTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/falling_sky_medium"
+            android:maxLines="2"
+            android:textColor="@color/main_dark"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/drinkImage"
+            app:layout_constraintTop_toTopOf="@+id/drinkImage"
+            tools:text="sdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasda"/>
+        />
+
+        <TextView
+            android:id="@+id/drinkSubTitle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="7dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/falling_sky_small"
+            android:maxLines="3"
+            android:textColor="@color/second_dark"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/ingredientsLayout"
+            app:layout_constraintEnd_toEndOf="@+id/drinkTitle"
+            app:layout_constraintStart_toStartOf="@+id/drinkTitle"
+            app:layout_constraintTop_toBottomOf="@+id/drinkTitle"
+            tools:text="sdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasda"/>
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/ingredientsLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:alignContent="stretch"
+            app:alignItems="stretch"
+            app:flexWrap="wrap"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/drinkSubTitle"
+            app:layout_constraintStart_toStartOf="@+id/drinkSubTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

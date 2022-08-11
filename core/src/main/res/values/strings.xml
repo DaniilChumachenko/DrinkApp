@@ -5,4 +5,5 @@
     <string name="core_title">DrinksApp</string>
     <string name="empty_try_looking_for_something_else">Empty! \nTry looking for something else!</string>
     <string name="scroll_up">Scroll up drinks list!</string>
+    <string name="search">Search</string>
 </resources>

@@ -9,7 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="main_dark">#020210</color>
     <color name="second_dark">#1B1B28</color>
-    <color name="ingredients_color">#B3650A</color>
+    <color name="ingredients_color">#e49429</color>
     <color name="screenBackground">#FFFFFFFF</color>
     <color name="shimmerColor">#EEEEEE</color>
 </resources>

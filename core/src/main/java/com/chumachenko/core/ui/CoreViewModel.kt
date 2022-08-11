@@ -24,7 +24,13 @@ class CoreViewModel(
             list.add(СoreCell.Skeleton)
             list.add(СoreCell.Skeleton)
             _uiData.value = list
+            getDataFromApi()
+        }
+    }
 
+    fun getDataFromApi() {
+        uiScope.launch {
+            val list = arrayListOf<СoreCell>()
             val drinks = coreInteractor.lastChooseDrinks()
             list.clear()
             list.add(СoreCell.Search)

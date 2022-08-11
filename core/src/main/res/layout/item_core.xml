@@ -40,8 +40,7 @@
         <TextView
             android:id="@+id/drinkSubTitle"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="7dp"
+            android:layout_height="match_parent"
             android:ellipsize="end"
             android:fontFamily="@font/falling_sky_small"
             android:maxLines="3"
@@ -63,7 +62,8 @@
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/drinkSubTitle"
-            app:layout_constraintStart_toStartOf="@+id/drinkSubTitle" />
+            app:layout_constraintStart_toStartOf="@+id/drinkSubTitle"
+            app:layout_constraintTop_toBottomOf="@+id/drinkSubTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

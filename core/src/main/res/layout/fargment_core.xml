@@ -16,8 +16,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
         android:layout_marginEnd="5dp"
+        android:layout_marginBottom="6dp"
         android:src="@drawable/ic_logo_drinks"
         app:layout_constraintBottom_toBottomOf="@+id/coreTitle"
         app:layout_constraintEnd_toStartOf="@+id/coreTitle"
@@ -31,8 +31,8 @@
         android:fontFamily="@font/falling_sky_bold"
         android:gravity="center"
         android:text="@string/core_title"
-        android:textSize="25dp"
         android:textColor="@color/main_dark"
+        android:textSize="25dp"
         app:layout_constraintEnd_toStartOf="@+id/coreFilters"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topInset" />
@@ -61,7 +61,37 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/drinksRecyclerView"
             android:layout_width="match_parent"
-            android:overScrollMode="never"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:overScrollMode="never" />
     </com.nabilmh.lottieswiperefreshlayout.LottieSwipeRefreshLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/scrollUpList"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/scroll_up_animation" />
+
+    <ImageView
+        android:id="@+id/scrollUpListBg"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:paddingBottom="0.6dp"
+        android:src="@drawable/bg_scroll_up"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollUpList"
+        app:layout_constraintEnd_toEndOf="@+id/scrollUpList"
+        app:layout_constraintStart_toStartOf="@+id/scrollUpList"
+        app:layout_constraintTop_toTopOf="@+id/scrollUpList" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/scrollUpGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="scrollUpList,scrollUpListBg" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

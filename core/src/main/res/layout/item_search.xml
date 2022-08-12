@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/notFoundPagesLottie"
+            android:id="@+id/searchLottieAnimation"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
@@ -25,15 +25,24 @@
             app:lottie_autoPlay="true"
             app:lottie_rawRes="@raw/search_core" />
 
-        <TextView
+        <EditText
+            android:id="@+id/searchInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="5dp"
+            android:autofillHints="@string/lets_go_find_something_to_drink"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:clickable="true"
             android:fontFamily="@font/falling_sky_medium"
-            android:hint="Let's go find something to drink!"
+            android:hint="@string/lets_go_find_something_to_drink"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLength="250"
+            android:textColor="@color/main_dark"
+            android:textColorHint="@color/main_gray"
+            android:textCursorDrawable="@drawable/bg_cursor_color"
             android:textSize="17sp" />
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

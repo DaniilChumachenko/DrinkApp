@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.chumachenko.core.common.Router
 import com.chumachenko.drinkapp.R
-import com.chumachenko.search.ui.SearchFragment
 
 class Application : Application(), Router {
 
@@ -53,11 +52,6 @@ class Application : Application(), Router {
     }
 
     override fun openSearchScreen(fragmentManager: FragmentManager) {
-        addFragment(
-            R.id.container,
-            fragmentManager,
-            SearchFragment.newInstance(),
-            FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN
-        )
+
     }
 }

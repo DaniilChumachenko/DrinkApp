@@ -6,7 +6,6 @@ class CoreInteractor(
     private val repository: CoreRepository
 ) {
 
-    suspend fun lastChooseDrinks() =
-        repository.lastChooseDrinks()
-
+    suspend fun searchDrinks(query: String) =
+        repository.searchDrinks(query)
 }

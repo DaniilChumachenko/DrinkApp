@@ -9,4 +9,7 @@ class CoreRepository(
     suspend fun lastChooseDrinks() =
         coreApi.lastChooseDrinks().toModel()
 
+    suspend fun searchDrinks(query: String) =
+        coreApi.searchDrinks(query).toModel()
+
 }

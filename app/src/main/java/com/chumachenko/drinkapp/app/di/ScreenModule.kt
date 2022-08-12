@@ -6,9 +6,6 @@ import com.chumachenko.core.ui.CoreViewModel
 import com.chumachenko.drinkapp.app.domain.interactor.AppInteractor
 import com.chumachenko.drinkapp.app.data.repository.AppRepository
 import com.chumachenko.drinkapp.app.ui.AppViewModel
-import com.chumachenko.search.data.domain.interactor.SearchInteractor
-import com.chumachenko.search.data.repository.SearchRepository
-import com.chumachenko.search.ui.SearchViewModel
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -23,13 +20,8 @@ val screenModule = module {
     //Core
     factory { CoreRepository(get()) }
     factory { CoreInteractor(get()) }
-    viewModel { CoreViewModel(get()) }
+    viewModel { CoreViewModel(get(), get(), get()) }
 
-    //Search
-    factory { SearchRepository(get()) }
-    factory { SearchInteractor(get()) }
-    viewModel { SearchViewModel(get()) }
-//
 //    factory {
 //        AuthRepository(
 //            get(),

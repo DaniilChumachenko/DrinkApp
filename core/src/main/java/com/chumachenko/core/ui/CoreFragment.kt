@@ -1,6 +1,8 @@
 package com.chumachenko.core.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +15,8 @@ import com.chumachenko.core.extensions.setConstraintStatusBarHeight
 import com.chumachenko.core.extensions.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClickListener {
+class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClickListener,
+    TextWatcher {
 
     private val viewModel by viewModel<CoreViewModel>()
     private val binding by viewBinding(FargmentCoreBinding::bind)
@@ -31,22 +34,35 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         initObservers()
         initAdapter()
         initListeners()
+        initViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.searchField.searchInput.addTextChangedListener(this)
     }
 
     private fun initListeners() {
-        binding.updateSwipe.setOnRefreshListener {
-            viewModel.getDataFromApi()
-        }
         binding.scrollUpListBg.setOnClickListener {
-            binding.drinksRecyclerView.scrollToPosition(0)
+            binding.drinksRecyclerView.smoothScrollToPosition(0)
             binding.scrollUpGroup.isVisible = false
         }
+    }
+
+    private fun initViews() = binding.apply {
+        searchField.searchInput.requestFocus()
+        showKeyboard(searchField.searchInput)
     }
 
     private fun initObservers() = viewModel.apply {
         uiData.observe(viewLifecycleOwner) {
             adapter.setData(it)
-            binding.updateSwipe.isRefreshing = false
+        }
+        playAnimation.observe(viewLifecycleOwner) {
+            if (it)
+                binding.searchField.searchLottieAnimation.playAnimation()
+            else
+                binding.searchField.searchLottieAnimation.resumeAnimation()
         }
     }
 
@@ -71,6 +87,40 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         })
     }
 
+    override fun onItemSelected(itemId: String) {
+
+    }
+
+    override fun onIngredientsClick(ingredient: String) {
+
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    }
+
+    override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        if (text != null) {
+            if (text.toString().trim() != viewModel.searchQuery) {
+//                (binding.searchRecyclerView.adapter as? SearchAdapter)?.clearItems()
+            }
+
+            viewModel.search(text.toString())
+        }
+    }
+
+    override fun afterTextChanged(text: Editable?) {
+//        if (s.toString() == "") {
+//            binding.groupCreateOwn.isVisible = true
+//            binding.notFound.isVisible = false
+//            binding.clearEditText.isVisible = false
+//        } else {
+//            binding.clearEditText.isVisible = true
+//        }
+        if (text.toString() == "") {
+            viewModel.startItem()
+        }
+    }
+
     companion object {
 
         //        private const val ARG_COMPILATION_ITEM = "ARG_COMPILATION_ITEM"
@@ -86,17 +136,4 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
             return fragment
         }
     }
-
-    override fun onItemSelected(itemId: String) {
-
-    }
-
-    override fun onSearchClick() {
-        router.openSearchScreen(parentFragmentManager)
-    }
-
-    override fun onIngredientsClick(ingredient: String) {
-
-    }
-
 }

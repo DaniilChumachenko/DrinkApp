@@ -47,22 +47,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topInset" />
 
-    <com.nabilmh.lottieswiperefreshlayout.LottieSwipeRefreshLayout
-        android:id="@+id/updateSwipe"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/drinksRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coreTitle"
-        app:lottie_rawRes="@raw/loading_drinks_core">
+        app:layout_constraintTop_toBottomOf="@+id/coreTitle" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/drinksRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never" />
-    </com.nabilmh.lottieswiperefreshlayout.LottieSwipeRefreshLayout>
+    <include
+        android:id="@+id/searchField"
+        layout="@layout/item_search"
+        android:layout_width="match_parent"
+        android:layout_margin="7dp"
+        android:layout_height="@dimen/core_search_height"
+        app:layout_constraintTop_toBottomOf="@+id/coreTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/scrollUpList"

@@ -92,11 +92,11 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
             it.adapter = adapter
         }
         binding.drinksRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    binding.scrollUpGroup.isVisible = recyclerView.getCurrentPosition() > 1
-                }
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy != 0 && keyboardStatus)
+                    hideKeyboard(binding.root)
+                binding.scrollUpGroup.isVisible = recyclerView.getCurrentPosition() > 1
             }
         })
     }
@@ -111,6 +111,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         viewModel.setShimmers()
+        keyboardStatus = true
     }
 
     override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {

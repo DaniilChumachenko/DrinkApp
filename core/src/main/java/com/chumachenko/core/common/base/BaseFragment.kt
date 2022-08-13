@@ -26,6 +26,7 @@ import org.koin.android.ext.android.inject
 abstract class BaseFragment(@LayoutRes val layoutRes: Int) : Fragment(layoutRes) {
 
     private val networkUtils: NetworkUtils by inject()
+    var keyboardStatus = false
 
     protected val router: Router by lazy {
         requireActivity().application as Router
@@ -82,12 +83,14 @@ abstract class BaseFragment(@LayoutRes val layoutRes: Int) : Fragment(layoutRes)
         val inputMethodManager =
             requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
         inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
+        keyboardStatus = false
     }
 
     protected fun showKeyboard(view: View) {
         val inputMethodManager =
             requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
         inputMethodManager?.showSoftInput(view, 0)
+        keyboardStatus = true
     }
 
     protected fun isOnline(): Boolean {

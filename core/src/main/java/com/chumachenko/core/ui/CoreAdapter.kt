@@ -3,6 +3,7 @@ package com.chumachenko.core.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.*
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -14,7 +15,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.chumachenko.core.R
 import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.databinding.ItemCoreBinding
-import com.chumachenko.core.databinding.ItemSearchCoreBinding
 import com.chumachenko.core.extensions.dpToPixel
 import com.google.android.flexbox.FlexboxLayout
 
@@ -22,7 +22,7 @@ class CoreAdapter(
     private val listener: CoreClickListener
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val cells = ArrayList<СoreCell>()
+    private val cells = ArrayList<CoreCell>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -40,6 +40,13 @@ class CoreAdapter(
                         .inflate(R.layout.item_shimmer_core, parent, false)
                 )
             }
+            VIEW_TYPE_START -> {
+                StartViewHolder(
+                    LayoutInflater
+                        .from(parent.context)
+                        .inflate(R.layout.item_start_core, parent, false)
+                )
+            }
             VIEW_TYPE_EMPTY -> {
                 EmptyViewHolder(
                     LayoutInflater
@@ -47,11 +54,11 @@ class CoreAdapter(
                         .inflate(R.layout.item_empty_core, parent, false)
                 )
             }
-            VIEW_TYPE_SEARCH -> {
-                SearchViewHolder(
+            VIEW_TYPE_SPACE -> {
+                SpaceViewHolder(
                     LayoutInflater
                         .from(parent.context)
-                        .inflate(R.layout.item_search_core, parent, false)
+                        .inflate(R.layout.item_space_core, parent, false)
                 )
             }
             else -> {
@@ -64,10 +71,9 @@ class CoreAdapter(
         when (holder) {
             is ItemViewHolder -> holder.bind(
                 listener,
-                (cells[position] as СoreCell.Item).item,
-                (cells[position] as СoreCell.Item).ingredients
+                (cells[position] as CoreCell.Item).item,
+                (cells[position] as CoreCell.Item).ingredients
             )
-            is SearchViewHolder -> holder.bind(listener)
         }
     }
 
@@ -77,14 +83,15 @@ class CoreAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (cells[position]) {
-            is СoreCell.Item -> VIEW_TYPE_ITEM
-            is СoreCell.Skeleton -> VIEW_TYPE_SKELETON
-            is СoreCell.Search -> VIEW_TYPE_SEARCH
-            is СoreCell.Empty -> VIEW_TYPE_EMPTY
+            is CoreCell.Item -> VIEW_TYPE_ITEM
+            is CoreCell.Skeleton -> VIEW_TYPE_SKELETON
+            is CoreCell.Space -> VIEW_TYPE_SPACE
+            is CoreCell.Start -> VIEW_TYPE_START
+            is CoreCell.Empty -> VIEW_TYPE_EMPTY
         }
     }
 
-    fun setData(newCells: List<СoreCell>) {
+    fun setData(newCells: List<CoreCell>) {
         when {
             cells.isEmpty() -> {
                 cells.addAll(newCells)
@@ -109,16 +116,12 @@ class CoreAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        if (holder is ItemViewHolder && payloads.firstOrNull() is СoreCell.Item) {
-            holder.updateUI((payloads.first() as СoreCell.Item))
+        if (holder is ItemViewHolder && payloads.firstOrNull() is CoreCell.Item) {
+            holder.updateUI((payloads.first() as CoreCell.Item))
         } else {
             super.onBindViewHolder(holder, position, payloads)
         }
     }
-
-    class SkeletonViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
-    class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemCoreBinding.bind(view)
@@ -154,7 +157,12 @@ class CoreAdapter(
                 val view = TextView(itemView.context)
                 view.text = name
                 view.paint.isUnderlineText = true
-                view.setTextColor(ContextCompat.getColor(itemView.context, R.color.ingredients_color))
+                view.setTextColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.ingredients_color
+                    )
+                )
                 view.typeface = ResourcesCompat.getFont(itemView.context, R.font.falling_sky_small)
                 val params = FlexboxLayout.LayoutParams(
                     FlexboxLayout.LayoutParams.WRAP_CONTENT,
@@ -170,7 +178,7 @@ class CoreAdapter(
             }
         }
 
-        fun updateUI(item: СoreCell.Item) {
+        fun updateUI(item: CoreCell.Item) {
 //            binding.projectStatus.setImageDrawable(
 //                ContextCompat.getDrawable(
 //                    itemView.context,
@@ -181,30 +189,24 @@ class CoreAdapter(
         }
     }
 
-    class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val binding = ItemSearchCoreBinding.bind(view)
+    class SkeletonViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-        fun bind(
-            listener: CoreClickListener
-        ) {
-            binding.apply {
-                root.setOnClickListener {
-                    listener.onSearchClick()
-                }
-            }
-        }
-    }
+    class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    class StartViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    class SpaceViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     interface CoreClickListener {
         fun onItemSelected(itemId: String)
-        fun onSearchClick()
         fun onIngredientsClick(ingredient: String)
     }
 
     companion object {
         private const val VIEW_TYPE_ITEM = 1
-        private const val VIEW_TYPE_SEARCH = 2
+        private const val VIEW_TYPE_SPACE = 2
         private const val VIEW_TYPE_SKELETON = 3
-        private const val VIEW_TYPE_EMPTY = 4
+        private const val VIEW_TYPE_START = 4
+        private const val VIEW_TYPE_EMPTY = 5
     }
 }

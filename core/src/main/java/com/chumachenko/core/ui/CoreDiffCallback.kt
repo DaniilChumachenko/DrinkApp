@@ -3,17 +3,17 @@ package com.chumachenko.core.ui
 import androidx.recyclerview.widget.DiffUtil
 
 class CoreDiffCallback(
-    private val oldList: List<СoreCell>,
-    private val newList: List<СoreCell>
+    private val oldList: List<CoreCell>,
+    private val newList: List<CoreCell>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
 
-        return if (oldItem is СoreCell.Item && newItem is СoreCell.Item) {
+        return if (oldItem is CoreCell.Item && newItem is CoreCell.Item) {
             oldItem.item.idDrink == newItem.item.idDrink
-        }else if (oldItem is СoreCell.Skeleton && newItem is СoreCell.Skeleton) {
+        }else if (oldItem is CoreCell.Skeleton && newItem is CoreCell.Skeleton) {
             true
         } else {
             oldItem == newItem
@@ -23,7 +23,7 @@ class CoreDiffCallback(
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
-        if (oldItem is СoreCell.Item && newItem is СoreCell.Item) {
+        if (oldItem is CoreCell.Item && newItem is CoreCell.Item) {
             return false
         }
 
@@ -34,7 +34,7 @@ class CoreDiffCallback(
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
 
-        if (oldItem is СoreCell.Item && newItem is СoreCell.Item && oldItem.selectId != newItem.selectId) {
+        if (oldItem is CoreCell.Item && newItem is CoreCell.Item && oldItem.selectId != newItem.selectId) {
             return newItem
         }
         return super.getChangePayload(oldItemPosition, newItemPosition)

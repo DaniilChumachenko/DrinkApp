@@ -25,19 +25,7 @@ abstract class BaseViewModel : ViewModel(), LifecycleObserver {
     }
 
     protected fun handleBaseCoroutineException(
-        liveData: com.chumachenko.core.common.SingleEventLiveData<String>,
-        exception: Throwable,
-        resourceManager: ResourceManager
-    ) {
-        liveData.value = if (exception.isInternetError()) {
-            resourceManager.getString(R.string.error_slow_or_no_internet_connection)
-        } else {
-            resourceManager.getString(R.string.error_something_went_wrong)
-        }
-
-        if (BuildConfig.DEBUG) {
-            exception.printStackTrace()
-        }
-    }
+        exception: Throwable
+    ) = exception.printStackTrace()
 
 }

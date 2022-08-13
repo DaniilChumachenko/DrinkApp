@@ -16,4 +16,9 @@ interface CoreApi {
     @GET("search.php?f=m")
     suspend fun lastChooseDrinks(): DrinksListResponse
 
+    @GET("search.php?")
+    suspend fun searchDrinks(
+        @Query("s") query: String
+    ): DrinksListResponse
+
 }

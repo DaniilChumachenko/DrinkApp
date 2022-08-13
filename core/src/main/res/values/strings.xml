@@ -3,6 +3,11 @@
     <string name="error_something_went_wrong">something went wrong</string>
     <string name="error_slow_or_no_internet_connection">slow or no internet connection</string>
     <string name="core_title">DrinksApp</string>
-    <string name="empty_try_looking_for_something_else">Empty! \nTry looking for something else!</string>
+    <string name="start_animation_drinks">Let\'s try to find what you like!</string>
+    <string name="empty_search_results">Nothing found! \nTry looking for other drinks!</string>
     <string name="scroll_up">Scroll up drinks list!</string>
+    <string name="search">Search</string>
+    <string name="lets_go_find_something_to_drink">Let\'s go find something to drink!</string>
+    <string name="error_sub_tittle">Please, check your internet connection!</string>
+    <string name="error_tittle">Something went wrong!</string>
 </resources>

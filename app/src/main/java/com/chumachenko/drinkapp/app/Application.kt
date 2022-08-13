@@ -3,7 +3,9 @@ package com.chumachenko.drinkapp.app
 import android.app.Application
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.chumachenko.core.common.Router
+import com.chumachenko.drinkapp.R
 
 class Application : Application(), Router {
 
@@ -49,48 +51,7 @@ class Application : Application(), Router {
         }
     }
 
-    override fun openProfileFullscreen(
-        fragmentManager: FragmentManager,
-        userId: Int,
-        userName: String
-    ) {
-//        replaceFragment(
-//            R.id.container,
-//            fragmentManager,
-//            ProfileFragment.newInstance(userId, true, userName),
-//            FragmentTransaction.TRANSIT_FRAGMENT_FADE
-//        )
-    }
+    override fun openSearchScreen(fragmentManager: FragmentManager) {
 
-    override fun openProfileByUserName(fragmentManager: FragmentManager, userName: String) {
-//        replaceFragment(
-//            R.id.container,
-//            fragmentManager,
-//            ProfileFragment.newInstanceByUserName(userName, false),
-//            FragmentTransaction.TRANSIT_FRAGMENT_FADE
-//        )
-    }
-
-    override fun openAsk(fragmentManager: FragmentManager, userId: Int) {
-//        replaceFragment(
-//            R.id.container,
-//            fragmentManager,
-//            AskItemsFragment.newInstance(userId),
-//            FragmentTransaction.TRANSIT_FRAGMENT_FADE
-//        )
-    }
-
-    override fun openWallet(
-        fragmentManager: FragmentManager,
-        userName: String,
-        userId: Int,
-        month: String
-    ) {
-//        replaceFragment(
-//            R.id.container,
-//            fragmentManager,
-//            WalletFragment.newInstance(userName, userId, month),
-//            FragmentTransaction.TRANSIT_FRAGMENT_FADE
-//        )
     }
 }

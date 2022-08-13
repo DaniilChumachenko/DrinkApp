@@ -10,10 +10,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingEnd="10dp"
         android:orientation="horizontal">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/notFoundPagesLottie"
+            android:id="@+id/searchLottieAnimation"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
@@ -25,15 +27,37 @@
             app:lottie_autoPlay="true"
             app:lottie_rawRes="@raw/search_core" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:autofillHints="@string/lets_go_find_something_to_drink"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:digits="0123456789qwertyuiopasdfghjklzxcvbnm.-/&amp;"
+            android:focusable="true"
             android:fontFamily="@font/falling_sky_medium"
-            android:hint="Let's go find something to drink!"
+            android:hint="@string/lets_go_find_something_to_drink"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLength="40"
+            android:textColor="@color/main_dark"
+            android:textColorHint="@color/main_gray"
+            android:textCursorDrawable="@drawable/bg_cursor_color"
             android:textSize="17sp" />
 
+        <ImageView
+            android:id="@+id/clearSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:background="@drawable/bg_clear_search"
+            android:padding="3dp"
+            android:src="@drawable/ic_clear_search"
+            android:visibility="invisible" />
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

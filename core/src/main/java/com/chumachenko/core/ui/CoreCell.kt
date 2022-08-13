@@ -2,17 +2,19 @@ package com.chumachenko.core.ui
 
 import com.chumachenko.core.data.model.Drink
 
-sealed class СoreCell {
+sealed class CoreCell {
 
     data class Item(
         val item: Drink,
         val selectId: String = "",
         val ingredients: List<String> = listOf(),
-    ) : СoreCell()
+    ) : CoreCell()
 
-    object Empty : СoreCell()
+    object Start : CoreCell()
 
-    object Search : СoreCell()
+    object Empty : CoreCell()
 
-    object Skeleton : СoreCell()
+    object Space : CoreCell()
+
+    object Skeleton : CoreCell()
 }

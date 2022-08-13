@@ -1,21 +1,25 @@
 package com.chumachenko.core.common.base
 
 import android.app.Activity
+import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.chumachenko.core.R
 import com.chumachenko.core.common.InsetHolder
 import com.chumachenko.core.common.NetworkUtils
 import com.chumachenko.core.common.Router
 import com.chumachenko.core.extensions.dpToPixel
+import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 
 
@@ -107,6 +111,21 @@ abstract class BaseFragment(@LayoutRes val layoutRes: Int) : Fragment(layoutRes)
 
     protected fun removeAdjustResize() {
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
+
+    fun drinksSnackbar(view: View) {
+        hideKeyboard(view)
+        val snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG)
+        val customSnackView: View =
+            layoutInflater.inflate(R.layout.drinks_snackbar, null)
+
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+
+        snackbarLayout.setPadding(0, 0, 0, 0)
+        snackbarLayout.addView(customSnackView, 0)
+        snackbar.show()
+
     }
 }
 

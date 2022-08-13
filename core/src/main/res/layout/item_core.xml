@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="10dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginBottom="5dp"
     android:elevation="7dp"
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_margin="15dp"
         android:layout_height="match_parent"
-        tools:ignore="ExtraText">
+        android:padding="15dp"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/drinkImage"
@@ -34,8 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/drinkImage"
             app:layout_constraintTop_toTopOf="@+id/drinkImage"
-            tools:text="sdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasda"/>
-        />
+            tools:text="sdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasda" />
 
         <TextView
             android:id="@+id/drinkSubTitle"
@@ -50,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="@+id/drinkTitle"
             app:layout_constraintStart_toStartOf="@+id/drinkTitle"
             app:layout_constraintTop_toBottomOf="@+id/drinkTitle"
-            tools:text="sdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasda"/>
+            tools:text="sdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasda" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/ingredientsLayout"

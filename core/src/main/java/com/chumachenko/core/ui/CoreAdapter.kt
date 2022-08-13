@@ -3,6 +3,7 @@ package com.chumachenko.core.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.*
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -156,7 +157,12 @@ class CoreAdapter(
                 val view = TextView(itemView.context)
                 view.text = name
                 view.paint.isUnderlineText = true
-                view.setTextColor(ContextCompat.getColor(itemView.context, R.color.ingredients_color))
+                view.setTextColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.ingredients_color
+                    )
+                )
                 view.typeface = ResourcesCompat.getFont(itemView.context, R.font.falling_sky_small)
                 val params = FlexboxLayout.LayoutParams(
                     FlexboxLayout.LayoutParams.WRAP_CONTENT,

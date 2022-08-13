@@ -20,7 +20,7 @@ val screenModule = module {
     //Core
     factory { CoreRepository(get()) }
     factory { CoreInteractor(get()) }
-    viewModel { CoreViewModel(get(), get(), get()) }
+    viewModel { CoreViewModel(get(), get()) }
 
 //    factory {
 //        AuthRepository(

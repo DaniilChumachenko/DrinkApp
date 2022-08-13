@@ -10,18 +10,14 @@ import com.chumachenko.core.common.base.BaseViewModel
 import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.DrinksList
 import com.chumachenko.core.domain.interactor.CoreInteractor
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 
 class CoreViewModel(
     private val coreInteractor: CoreInteractor,
-    private val networkUtils: NetworkUtils,
-    private val resourceManager: ResourceManager
+    private val networkUtils: NetworkUtils
 ) : BaseViewModel() {
     var searchQuery: String = ""
         private set
@@ -30,13 +26,13 @@ class CoreViewModel(
 
     val uiData: LiveData<List<CoreCell>>
         get() = _uiData
-    val errorSearch: LiveData<String>
+    val errorSearch: LiveData<Unit>
         get() = _errorSearch
     val playAnimation: LiveData<Boolean>
         get() = _playAnimation
 
     private val _uiData = MutableLiveData<List<CoreCell>>()
-    private val _errorSearch = SingleEventLiveData<String>()
+    private val _errorSearch = SingleEventLiveData<Unit>()
     private val _playAnimation = MutableLiveData<Boolean>()
 
     private val queryChannel = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 0)
@@ -44,7 +40,7 @@ class CoreViewModel(
     private var searchJob: Job? = null
 
     private val searchErrorHandler = CoroutineExceptionHandler { _, exception ->
-        handleBaseCoroutineException(_errorSearch, exception, resourceManager)
+        handleBaseCoroutineException(exception)
         _uiData.value = arrayListOf<CoreCell.Empty>().apply { add(CoreCell.Empty) }
     }
 
@@ -86,24 +82,24 @@ class CoreViewModel(
                     _uiData.value = arrayListOf<CoreCell>().apply { add(CoreCell.Empty) }
                 } else {
                     animate = true
-                    _uiData.value = setShimmers()
                     getDrinksList(drinks)
                     _playAnimation.value = false
                 }
                 showProgress.value = false
             }
         } else {
-            _errorSearch.value =
-                resourceManager.getString(R.string.error_slow_or_no_internet_connection)
+            _errorSearch.value = Unit
         }
     }
 
-    private fun setShimmers(): ArrayList<CoreCell> = arrayListOf<CoreCell>().apply {
-        add(CoreCell.Space)
-        add(CoreCell.Skeleton)
-        add(CoreCell.Skeleton)
-        add(CoreCell.Skeleton)
-        add(CoreCell.Skeleton)
+    fun setShimmers() {
+        _uiData.value = arrayListOf<CoreCell>().apply {
+            add(CoreCell.Space)
+            add(CoreCell.Skeleton)
+            add(CoreCell.Skeleton)
+            add(CoreCell.Skeleton)
+            add(CoreCell.Skeleton)
+        }
     }
 
     fun search(query: String) {
@@ -150,7 +146,7 @@ class CoreViewModel(
             add(it.strIngredient6)
     }
 
-    fun startItem(){
+    fun startItem() {
         _uiData.value = arrayListOf<CoreCell>().apply { add(CoreCell.Start) }
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,10 +43,17 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         binding.searchField.searchInput.addTextChangedListener(this)
     }
 
-    private fun initListeners() {
-        binding.scrollUpListBg.setOnClickListener {
-            binding.drinksRecyclerView.smoothScrollToPosition(0)
-            binding.scrollUpGroup.isVisible = false
+    private fun initListeners() = binding.apply {
+        scrollUpListBg.setOnClickListener {
+            drinksRecyclerView.smoothScrollToPosition(0)
+            scrollUpGroup.isVisible = false
+        }
+        searchField.clearSearch.setOnClickListener {
+            searchField.searchInput.text.clear()
+        }
+        searchField.root.setOnClickListener {
+            searchField.searchInput.requestFocus()
+            showKeyboard(searchField.searchInput)
         }
     }
 
@@ -63,6 +71,9 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
                 binding.searchField.searchLottieAnimation.playAnimation()
             else
                 binding.searchField.searchLottieAnimation.resumeAnimation()
+        }
+        errorSearch.observe(viewLifecycleOwner) {
+            drinksSnackbar(binding.root)
         }
     }
 
@@ -96,26 +107,17 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        viewModel.setShimmers()
     }
 
     override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
         if (text != null) {
-            if (text.toString().trim() != viewModel.searchQuery) {
-//                (binding.searchRecyclerView.adapter as? SearchAdapter)?.clearItems()
-            }
-
             viewModel.search(text.toString())
         }
     }
 
     override fun afterTextChanged(text: Editable?) {
-//        if (s.toString() == "") {
-//            binding.groupCreateOwn.isVisible = true
-//            binding.notFound.isVisible = false
-//            binding.clearEditText.isVisible = false
-//        } else {
-//            binding.clearEditText.isVisible = true
-//        }
+        binding.searchField.clearSearch.isInvisible = text.toString() == ""
         if (text.toString() == "") {
             viewModel.startItem()
         }

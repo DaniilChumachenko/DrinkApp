@@ -8,4 +8,6 @@
     <string name="scroll_up">Scroll up drinks list!</string>
     <string name="search">Search</string>
     <string name="lets_go_find_something_to_drink">Let\'s go find something to drink!</string>
+    <string name="error_sub_tittle">Please, check your internet connection!</string>
+    <string name="error_tittle">Something went wrong!</string>
 </resources>

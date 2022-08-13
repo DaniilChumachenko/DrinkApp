@@ -64,6 +64,8 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
 
     private fun initObservers() = viewModel.apply {
         uiData.observe(viewLifecycleOwner) {
+            if (it.first() is CoreCell.Empty)
+                hideKeyboard(binding.root)
             adapter.setData(it)
         }
         playAnimation.observe(viewLifecycleOwner) {
@@ -73,6 +75,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
                 binding.searchField.searchLottieAnimation.resumeAnimation()
         }
         errorSearch.observe(viewLifecycleOwner) {
+            viewModel.showEmptyItem()
             drinksSnackbar(binding.root)
         }
     }
@@ -119,7 +122,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
     override fun afterTextChanged(text: Editable?) {
         binding.searchField.clearSearch.isInvisible = text.toString() == ""
         if (text.toString() == "") {
-            viewModel.startItem()
+            viewModel.showStartItem()
         }
     }
 

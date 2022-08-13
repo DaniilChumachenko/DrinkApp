@@ -2,9 +2,7 @@ package com.chumachenko.core.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.chumachenko.core.R
 import com.chumachenko.core.common.NetworkUtils
-import com.chumachenko.core.common.ResourceManager
 import com.chumachenko.core.common.SingleEventLiveData
 import com.chumachenko.core.common.base.BaseViewModel
 import com.chumachenko.core.data.model.Drink
@@ -41,7 +39,7 @@ class CoreViewModel(
 
     private val searchErrorHandler = CoroutineExceptionHandler { _, exception ->
         handleBaseCoroutineException(exception)
-        _uiData.value = arrayListOf<CoreCell.Empty>().apply { add(CoreCell.Empty) }
+        showEmptyItem()
     }
 
     override fun onCleared() {
@@ -79,7 +77,7 @@ class CoreViewModel(
                 val drinks = coreInteractor.searchDrinks(searchQuery)
                 if (drinks.drinks.isEmpty()) {
                     animate = false
-                    _uiData.value = arrayListOf<CoreCell>().apply { add(CoreCell.Empty) }
+                    showEmptyItem()
                 } else {
                     animate = true
                     getDrinksList(drinks)
@@ -118,16 +116,16 @@ class CoreViewModel(
 
     private fun getDrinksList(drinks: DrinksList) {
         uiScope.launch {
-            val list = arrayListOf<CoreCell>()
-            list.add(CoreCell.Space)
             if (drinks.drinks.isEmpty()) {
-                list.add(CoreCell.Empty)
+                showEmptyItem()
             } else {
-                drinks.drinks.forEach {
-                    list.add(CoreCell.Item(it, ingredients = collectIngredients(it)))
+                _uiData.value = arrayListOf<CoreCell>().apply {
+                    add(CoreCell.Space)
+                    drinks.drinks.forEach {
+                        add(CoreCell.Item(it, ingredients = collectIngredients(it)))
+                    }
                 }
             }
-            _uiData.value = list
         }
     }
 
@@ -146,13 +144,17 @@ class CoreViewModel(
             add(it.strIngredient6)
     }
 
-    fun startItem() {
+    fun showStartItem() {
         _uiData.value = arrayListOf<CoreCell>().apply { add(CoreCell.Start) }
+    }
+
+    fun showEmptyItem() {
+        _uiData.value = arrayListOf<CoreCell.Empty>().apply { add(CoreCell.Empty) }
     }
 
     fun setupOnCreateMethod() {
         observeQuery()
-        startItem()
+        showStartItem()
         //TODO добавить последний запрос, ресенты
     }
 }

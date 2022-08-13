@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chumachenko.core.R
 import com.chumachenko.core.common.base.BaseFragment
+import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.databinding.FargmentCoreBinding
 import com.chumachenko.core.extensions.getCurrentPosition
 import com.chumachenko.core.extensions.setConstraintStatusBarHeight
@@ -101,12 +102,20 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         })
     }
 
-    override fun onItemSelected(itemId: String) {
-
+    override fun onItemClick() {
+        viewModel.saveSearchItem(SearchResult(viewModel.searchQuery))
     }
 
     override fun onIngredientsClick(ingredient: String) {
 
+    }
+
+    override fun onRecentClick(ingredient: String) {
+
+    }
+
+    override fun onRecentClear() {
+        viewModel.recentClear()
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -123,7 +132,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
     override fun afterTextChanged(text: Editable?) {
         binding.searchField.clearSearch.isInvisible = text.toString() == ""
         if (text.toString() == "") {
-            viewModel.showStartItem()
+            viewModel.setRecentSearchData()
         }
     }
 

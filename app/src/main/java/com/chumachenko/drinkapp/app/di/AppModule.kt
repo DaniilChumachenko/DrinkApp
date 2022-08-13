@@ -12,7 +12,7 @@ val appModule = module {
     single<DrinkDatabase> {
         Room.databaseBuilder(
             get(),
-            DrinkDatabase::class.java, "ss-database"
+            DrinkDatabase::class.java, "drink-database"
         ).fallbackToDestructiveMigration()
             .build()
     }

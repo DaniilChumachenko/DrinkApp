@@ -2,11 +2,14 @@ package com.chumachenko.core.ui
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.animation.*
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,7 +17,10 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.chumachenko.core.R
 import com.chumachenko.core.data.model.Drink
+import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.databinding.ItemCoreBinding
+import com.chumachenko.core.databinding.ItemRecentCoreBinding
+import com.chumachenko.core.databinding.ItemStartCoreBinding
 import com.chumachenko.core.extensions.dpToPixel
 import com.google.android.flexbox.FlexboxLayout
 
@@ -61,6 +67,13 @@ class CoreAdapter(
                         .inflate(R.layout.item_space_core, parent, false)
                 )
             }
+            VIEW_TYPE_RECENT -> {
+                RecentViewHolder(
+                    LayoutInflater
+                        .from(parent.context)
+                        .inflate(R.layout.item_recent_core, parent, false)
+                )
+            }
             else -> {
                 throw IllegalArgumentException("Unknown viewType $viewType")
             }
@@ -73,6 +86,13 @@ class CoreAdapter(
                 listener,
                 (cells[position] as CoreCell.Item).item,
                 (cells[position] as CoreCell.Item).ingredients
+            )
+            is RecentViewHolder -> holder.bind(
+                listener,
+                (cells[position] as CoreCell.Recent).item
+            )
+            is StartViewHolder -> holder.bind(
+                cells
             )
         }
     }
@@ -88,6 +108,7 @@ class CoreAdapter(
             is CoreCell.Space -> VIEW_TYPE_SPACE
             is CoreCell.Start -> VIEW_TYPE_START
             is CoreCell.Empty -> VIEW_TYPE_EMPTY
+            is CoreCell.Recent -> VIEW_TYPE_RECENT
         }
     }
 
@@ -116,8 +137,8 @@ class CoreAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        if (holder is ItemViewHolder && payloads.firstOrNull() is CoreCell.Item) {
-            holder.updateUI((payloads.first() as CoreCell.Item))
+        if (holder is StartViewHolder && payloads.firstOrNull() is CoreCell.Start) {
+            holder.showArrow(cells)
         } else {
             super.onBindViewHolder(holder, position, payloads)
         }
@@ -146,7 +167,7 @@ class CoreAdapter(
                 drinkSubTitle.text = item.strInstructions
                 displayIngredients(ingredients, listener)
                 root.setOnClickListener {
-
+                    listener.onItemClick()
                 }
             }
         }
@@ -177,15 +198,51 @@ class CoreAdapter(
                 binding.ingredientsLayout.addView(view, params)
             }
         }
+    }
 
-        fun updateUI(item: CoreCell.Item) {
-//            binding.projectStatus.setImageDrawable(
-//                ContextCompat.getDrawable(
-//                    itemView.context,
-//                    if (item.item.id == item.selectId) R.drawable.ic_project_checkbox_on
-//                    else R.drawable.ic_project_checkbox_off
-//                )
-//            )
+    class RecentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = ItemRecentCoreBinding.bind(view)
+
+        fun bind(
+            listener: CoreClickListener,
+            recent: List<SearchResult>
+        ) {
+            binding.apply {
+                recentLayout.removeAllViewsInLayout()
+                recent.forEachIndexed { index, drink ->
+                    val view = TextView(itemView.context)
+
+                    when {
+                        index != recent.lastIndex && index != 0 -> view.text =
+                            drink.title.plus(",")
+                        else -> view.text = drink.title
+                    }
+
+                    view.setTextColor(
+                        ContextCompat.getColor(
+                            itemView.context,
+                            R.color.main_gray
+                        )
+                    )
+                    view.typeface =
+                        ResourcesCompat.getFont(itemView.context, R.font.falling_sky_small)
+                    val params = FlexboxLayout.LayoutParams(
+                        FlexboxLayout.LayoutParams.WRAP_CONTENT,
+                        FlexboxLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    params.topMargin = dpToPixel(3, view.context).toInt()
+                    params.bottomMargin = 0
+                    params.marginEnd = dpToPixel(5, view.context).toInt()
+
+                    view.setOnClickListener {
+                        listener.onRecentClick(drink.title)
+                    }
+                    recentLayout.addView(view, params)
+                }
+                clearRecent.setOnClickListener {
+                    listener.onRecentClear()
+                }
+            }
         }
     }
 
@@ -193,13 +250,38 @@ class CoreAdapter(
 
     class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    class StartViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class StartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = ItemStartCoreBinding.bind(view)
+
+        fun bind(cells: ArrayList<CoreCell>) {
+            showArrow(cells)
+        }
+
+        fun showArrow(cells: ArrayList<CoreCell>) {
+            var haveRecent = false
+            cells.forEach {
+                if (it is CoreCell.Recent)
+                    haveRecent = true
+            }
+            if (!haveRecent){
+                binding.arrowToSearch.isVisible = true
+                binding.arrowToSearch.playAnimation()
+            }else{
+                binding.arrowToSearch.cancelAnimation()
+                binding.arrowToSearch.isVisible = false
+            }
+
+            binding.startCoreLottie.playAnimation()
+        }
+    }
 
     class SpaceViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     interface CoreClickListener {
-        fun onItemSelected(itemId: String)
+        fun onItemClick()
         fun onIngredientsClick(ingredient: String)
+        fun onRecentClick(ingredient: String)
+        fun onRecentClear()
     }
 
     companion object {
@@ -208,5 +290,6 @@ class CoreAdapter(
         private const val VIEW_TYPE_SKELETON = 3
         private const val VIEW_TYPE_START = 4
         private const val VIEW_TYPE_EMPTY = 5
+        private const val VIEW_TYPE_RECENT = 6
     }
 }

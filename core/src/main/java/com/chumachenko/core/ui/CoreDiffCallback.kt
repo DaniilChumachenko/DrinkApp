@@ -15,6 +15,8 @@ class CoreDiffCallback(
             oldItem.item.idDrink == newItem.item.idDrink
         }else if (oldItem is CoreCell.Skeleton && newItem is CoreCell.Skeleton) {
             true
+        }else if (oldItem is CoreCell.Start && newItem is CoreCell.Start) {
+            true
         } else {
             oldItem == newItem
         }
@@ -25,6 +27,8 @@ class CoreDiffCallback(
         val newItem = newList[newItemPosition]
         if (oldItem is CoreCell.Item && newItem is CoreCell.Item) {
             return false
+        }else if (oldItem is CoreCell.Start && newItem is CoreCell.Start) {
+            return false
         }
 
         return oldItem == newItem
@@ -34,7 +38,7 @@ class CoreDiffCallback(
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
 
-        if (oldItem is CoreCell.Item && newItem is CoreCell.Item && oldItem.selectId != newItem.selectId) {
+        if (oldItem is CoreCell.Start && newItem is CoreCell.Start) {
             return newItem
         }
         return super.getChangePayload(oldItemPosition, newItemPosition)

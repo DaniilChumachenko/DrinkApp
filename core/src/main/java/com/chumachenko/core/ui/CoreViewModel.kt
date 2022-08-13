@@ -1,12 +1,16 @@
 package com.chumachenko.core.ui
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
 import com.chumachenko.core.common.NetworkUtils
 import com.chumachenko.core.common.SingleEventLiveData
 import com.chumachenko.core.common.base.BaseViewModel
 import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.DrinksList
+import com.chumachenko.core.data.model.SearchResult
+import com.chumachenko.core.data.storage.database.DrinkDatabase
 import com.chumachenko.core.domain.interactor.CoreInteractor
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -40,6 +44,12 @@ class CoreViewModel(
     private val searchErrorHandler = CoroutineExceptionHandler { _, exception ->
         handleBaseCoroutineException(exception)
         showEmptyItem()
+    }
+
+    fun setupOnCreateMethod() {
+        observeQuery()
+        setRecentSearchData()
+        //TODO добавить последний запрос, ресенты
     }
 
     override fun onCleared() {
@@ -90,30 +100,6 @@ class CoreViewModel(
         }
     }
 
-    fun setShimmers() {
-        _uiData.value = arrayListOf<CoreCell>().apply {
-            add(CoreCell.Space)
-            add(CoreCell.Skeleton)
-            add(CoreCell.Skeleton)
-            add(CoreCell.Skeleton)
-            add(CoreCell.Skeleton)
-        }
-    }
-
-    fun search(query: String) {
-        if (query.trim().isEmpty()) {
-            searchJob?.cancel()
-            searchJob = null
-
-            uiScope.launch { queryChannel.emit("") }
-
-            showProgress.value = false
-            searchQuery = ""
-        } else {
-            uiScope.launch { queryChannel.emit(query) }
-        }
-    }
-
     private fun getDrinksList(drinks: DrinksList) {
         uiScope.launch {
             if (drinks.drinks.isEmpty()) {
@@ -144,6 +130,48 @@ class CoreViewModel(
             add(it.strIngredient6)
     }
 
+    fun setRecentSearchData() {
+        uiScope.launch {
+            val recent = coreInteractor.getRecentSearches()
+            if (recent.isNotEmpty()) {
+                _uiData.value = arrayListOf<CoreCell>().apply {
+                    add(CoreCell.Space)
+                    (recent as ArrayList<SearchResult>).apply {
+                        add(0, SearchResult("Recent search: "))
+                    }
+                    add(CoreCell.Recent(recent))
+                    add(CoreCell.Start)
+                }
+            } else {
+                showStartItem()
+            }
+        }
+    }
+
+    fun setShimmers() {
+        _uiData.value = arrayListOf<CoreCell>().apply {
+            add(CoreCell.Space)
+            add(CoreCell.Skeleton)
+            add(CoreCell.Skeleton)
+            add(CoreCell.Skeleton)
+            add(CoreCell.Skeleton)
+        }
+    }
+
+    fun search(query: String) {
+        if (query.trim().isEmpty()) {
+            searchJob?.cancel()
+            searchJob = null
+
+            uiScope.launch { queryChannel.emit("") }
+
+            showProgress.value = false
+            searchQuery = ""
+        } else {
+            uiScope.launch { queryChannel.emit(query) }
+        }
+    }
+
     fun showStartItem() {
         _uiData.value = arrayListOf<CoreCell>().apply { add(CoreCell.Start) }
     }
@@ -152,9 +180,20 @@ class CoreViewModel(
         _uiData.value = arrayListOf<CoreCell.Empty>().apply { add(CoreCell.Empty) }
     }
 
-    fun setupOnCreateMethod() {
-        observeQuery()
-        showStartItem()
-        //TODO добавить последний запрос, ресенты
+    fun saveSearchItem(item: SearchResult) {
+        uiScope.launch {
+            try {
+                coreInteractor.addRecentSearch(item)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun recentClear() {
+        uiScope.launch {
+            showStartItem()
+            coreInteractor.clearRecentSearch()
+        }
     }
 }

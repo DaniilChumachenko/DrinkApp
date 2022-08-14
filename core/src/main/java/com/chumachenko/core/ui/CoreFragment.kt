@@ -50,6 +50,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
             scrollUpGroup.isVisible = false
         }
         searchField.clearSearch.setOnClickListener {
+            viewModel.clearSearchOn = true
             searchField.searchInput.text.clear()
         }
         searchField.root.setOnClickListener {
@@ -60,6 +61,8 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
 
     private fun initViews() = binding.apply {
         searchField.searchInput.requestFocus()
+        //TODO ПОДУМАТЬ КАК МОЖЕТ ЧЕ В ТЕКСТЕ СДЕЛАТЬ
+        searchField.searchInput.hint = viewModel.lastQuery
         showKeyboard(searchField.searchInput)
     }
 
@@ -111,15 +114,18 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
     }
 
     override fun onRecentClick(ingredient: String) {
-
+        binding.searchField.searchInput.setText(ingredient)
     }
 
     override fun onRecentClear() {
         viewModel.recentClear()
     }
 
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        viewModel.setShimmers()
+    override fun beforeTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        if (!viewModel.clearSearchOn && text != "")
+            viewModel.setShimmers()
+        else
+            viewModel.clearSearchOn = false
         keyboardStatus = true
     }
 

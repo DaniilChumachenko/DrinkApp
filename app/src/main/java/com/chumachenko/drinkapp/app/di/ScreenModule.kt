@@ -1,6 +1,7 @@
 package com.chumachenko.drinkapp.app.di
 
 import com.chumachenko.core.data.repository.CoreRepository
+import com.chumachenko.core.data.storage.cache.SearchCache
 import com.chumachenko.core.domain.interactor.CoreInteractor
 import com.chumachenko.core.ui.CoreViewModel
 import com.chumachenko.drinkapp.app.domain.interactor.AppInteractor
@@ -18,9 +19,10 @@ val screenModule = module {
     viewModel { AppViewModel(get()) }
 
     //Core
-    factory { CoreRepository(get(), get()) }
+    factory { CoreRepository(get(), get(), get()) }
     factory { CoreInteractor(get()) }
-    viewModel { CoreViewModel(get(), get()) }
+    viewModel { CoreViewModel(get(), get(), get()) }
+    single { SearchCache() }
 
 //    factory {
 //        AuthRepository(

@@ -1,16 +1,13 @@
 package com.chumachenko.core.ui
 
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
 import com.chumachenko.core.common.NetworkUtils
 import com.chumachenko.core.common.SingleEventLiveData
 import com.chumachenko.core.common.base.BaseViewModel
 import com.chumachenko.core.data.model.Drink
-import com.chumachenko.core.data.model.DrinksList
 import com.chumachenko.core.data.model.SearchResult
-import com.chumachenko.core.data.storage.database.DrinkDatabase
+import com.chumachenko.core.data.storage.DrinksPreferencesManager
 import com.chumachenko.core.domain.interactor.CoreInteractor
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,12 +16,18 @@ import kotlinx.coroutines.flow.debounce
 
 class CoreViewModel(
     private val coreInteractor: CoreInteractor,
-    private val networkUtils: NetworkUtils
+    private val networkUtils: NetworkUtils,
+    private val preferencesManager: DrinksPreferencesManager,
 ) : BaseViewModel() {
     var searchQuery: String = ""
         private set
     var animate: Boolean = false
         private set
+    var clearSearchOn: Boolean = false
+    val lastQuery: String
+        get() {
+            return preferencesManager.lastQuery
+        }
 
     val uiData: LiveData<List<CoreCell>>
         get() = _uiData
@@ -46,15 +49,23 @@ class CoreViewModel(
         showEmptyItem()
     }
 
-    fun setupOnCreateMethod() {
-        observeQuery()
-        setRecentSearchData()
-        //TODO добавить последний запрос, ресенты
-    }
-
     override fun onCleared() {
         searchJob?.cancel()
         super.onCleared()
+    }
+
+    fun setupOnCreateMethod() {
+        observeQuery()
+        setRecentSearchData()
+        lastDrinks()
+        //TODO добавить последний запрос, ресенты
+    }
+
+    private fun lastDrinks() {
+        uiScope.launch {
+            val drinks = coreInteractor.getLastDrinks()
+            getDrinksList(drinks.reversed().map { it.toDrinkModel() })
+        }
     }
 
     private fun observeQuery() {
@@ -85,12 +96,13 @@ class CoreViewModel(
             searchJob = (uiScope + searchErrorHandler).launch {
                 _playAnimation.value = true
                 val drinks = coreInteractor.searchDrinks(searchQuery)
+                preferencesManager.lastQuery = searchQuery
                 if (drinks.drinks.isEmpty()) {
                     animate = false
                     showEmptyItem()
                 } else {
                     animate = true
-                    getDrinksList(drinks)
+                    getDrinksList(drinks.drinks)
                     _playAnimation.value = false
                 }
                 showProgress.value = false
@@ -100,14 +112,14 @@ class CoreViewModel(
         }
     }
 
-    private fun getDrinksList(drinks: DrinksList) {
+    private fun getDrinksList(drinks: List<Drink>) {
         uiScope.launch {
-            if (drinks.drinks.isEmpty()) {
+            if (drinks.isEmpty()) {
                 showEmptyItem()
             } else {
                 _uiData.value = arrayListOf<CoreCell>().apply {
                     add(CoreCell.Space)
-                    drinks.drinks.forEach {
+                    drinks.forEach {
                         add(CoreCell.Item(it, ingredients = collectIngredients(it)))
                     }
                 }

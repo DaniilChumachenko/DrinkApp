@@ -19,7 +19,7 @@ val networkingModule = module {
         GsonBuilder().create()
     }
 
-    single<OkHttpClient> {
+    single {
         OkHttpClient.Builder().apply {
             writeTimeout(60, TimeUnit.SECONDS)
             readTimeout(60, TimeUnit.SECONDS)

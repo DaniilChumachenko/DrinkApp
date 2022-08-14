@@ -1,6 +1,7 @@
 package com.chumachenko.core.data.model
 
 import android.os.Parcelable
+import com.chumachenko.core.data.storage.database.entity.DrinksHistory
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -26,4 +27,29 @@ data class Drink(
     val strImageSource: String,
     val strTags: String,
     val strVideo: String
-) : Parcelable
+) : Parcelable {
+
+    fun toEntity(): DrinksHistory = DrinksHistory(
+        dateModified = dateModified,
+        idDrink = idDrink,
+        strAlcoholic = strAlcoholic,
+        strCategory = strCategory,
+        strCreativeCommonsConfirmed = strCreativeCommonsConfirmed,
+        strDrink = strDrink,
+        strDrinkAlternate = strDrinkAlternate,
+        strInstructions = strInstructions,
+        strDrinkThumb = strDrinkThumb,
+        strIngredient1 = strIngredient1,
+        strIngredient2 = strIngredient2,
+        strIngredient3 = strIngredient3,
+        strIngredient4 = strIngredient4,
+        strIngredient5 = strIngredient5,
+        strIngredient6 = strIngredient6,
+        strGlass = strGlass,
+        strIBA = strIBA,
+        strImageAttribution = strImageAttribution,
+        strImageSource = strImageSource,
+        strTags = strTags,
+        strVideo = strVideo
+    )
+}

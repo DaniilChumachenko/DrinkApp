@@ -13,7 +13,7 @@ class CoreDiffCallback(
 
         return if (oldItem is CoreCell.Item && newItem is CoreCell.Item) {
             oldItem.item.idDrink == newItem.item.idDrink
-        }else if (oldItem is CoreCell.Skeleton && newItem is CoreCell.Skeleton) {
+        }else if (oldItem is CoreCell.Shimmer && newItem is CoreCell.Shimmer) {
             true
         }else if (oldItem is CoreCell.Start && newItem is CoreCell.Start) {
             true

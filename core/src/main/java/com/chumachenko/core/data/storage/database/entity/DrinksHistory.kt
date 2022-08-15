@@ -9,9 +9,8 @@ import java.util.*
 
 @Entity(tableName = "drinks_history")
 data class DrinksHistory(
-    @PrimaryKey val id: String = UUID.randomUUID().toString(),
+    @PrimaryKey val idDrink: String,
     @ColumnInfo(name = "dateModified") val dateModified: String,
-    @ColumnInfo(name = "idDrink") val idDrink: String,
     @ColumnInfo(name = "strAlcoholic") val strAlcoholic: String,
     @ColumnInfo(name = "strCategory") val strCategory: String,
     @ColumnInfo(name = "strCreativeCommonsConfirmed") val strCreativeCommonsConfirmed: String,

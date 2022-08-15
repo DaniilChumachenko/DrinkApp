@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chumachenko.core.R
 import com.chumachenko.core.common.base.BaseFragment
+import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.databinding.FargmentCoreBinding
 import com.chumachenko.core.extensions.getCurrentPosition
+import com.chumachenko.core.extensions.second
 import com.chumachenko.core.extensions.setConstraintStatusBarHeight
 import com.chumachenko.core.extensions.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -70,17 +72,18 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         uiData.observe(viewLifecycleOwner) {
             if (it.first() is CoreCell.Empty)
                 hideKeyboard(binding.root)
-            adapter.setData(it)
-        }
-        playAnimation.observe(viewLifecycleOwner) {
-            if (it)
-                binding.searchField.searchLottieAnimation.playAnimation()
-            else
+            if (it.second() is CoreCell.Shimmer)
                 binding.searchField.searchLottieAnimation.resumeAnimation()
+            else
+                binding.searchField.searchLottieAnimation.pauseAnimation()
+            adapter.setData(it)
         }
         errorSearch.observe(viewLifecycleOwner) {
             viewModel.showEmptyItem()
             drinksSnackbar(binding.root)
+        }
+        updateHint.observe(viewLifecycleOwner) {
+            binding.searchField.searchInput.hint = viewModel.lastQuery
         }
     }
 
@@ -105,8 +108,8 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         })
     }
 
-    override fun onItemClick() {
-        viewModel.saveSearchItem(SearchResult(viewModel.searchQuery))
+    override fun onItemClick(item: Drink) {
+        viewModel.saveSearchItem(SearchResult(viewModel.searchQuery), item)
     }
 
     override fun onIngredientsClick(ingredient: String) {
@@ -122,10 +125,12 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
     }
 
     override fun beforeTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        if (!viewModel.clearSearchOn && text != "")
+        if (!viewModel.clearSearchOn && text != "") {
             viewModel.setShimmers()
-        else
+        } else {
             viewModel.clearSearchOn = false
+            hideKeyboard(binding.root)
+        }
         keyboardStatus = true
     }
 

@@ -2,13 +2,10 @@ package com.chumachenko.core.ui
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -104,7 +101,7 @@ class CoreAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (cells[position]) {
             is CoreCell.Item -> VIEW_TYPE_ITEM
-            is CoreCell.Skeleton -> VIEW_TYPE_SKELETON
+            is CoreCell.Shimmer -> VIEW_TYPE_SKELETON
             is CoreCell.Space -> VIEW_TYPE_SPACE
             is CoreCell.Start -> VIEW_TYPE_START
             is CoreCell.Empty -> VIEW_TYPE_EMPTY
@@ -167,7 +164,7 @@ class CoreAdapter(
                 drinkSubTitle.text = item.strInstructions
                 displayIngredients(ingredients, listener)
                 root.setOnClickListener {
-                    listener.onItemClick()
+                    listener.onItemClick(item)
                 }
             }
         }
@@ -278,7 +275,7 @@ class CoreAdapter(
     class SpaceViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     interface CoreClickListener {
-        fun onItemClick()
+        fun onItemClick(item: Drink)
         fun onIngredientsClick(ingredient: String)
         fun onRecentClick(ingredient: String)
         fun onRecentClear()

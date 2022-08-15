@@ -19,6 +19,6 @@ abstract class DrinkDatabase : RoomDatabase() {
     abstract fun drinksHistoryDao(): DrinksHistoryDao
 
     companion object {
-        const val DB_VERSION = 2
+        const val DB_VERSION = 3
     }
 }

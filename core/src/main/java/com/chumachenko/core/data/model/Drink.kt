@@ -30,8 +30,8 @@ data class Drink(
 ) : Parcelable {
 
     fun toEntity(): DrinksHistory = DrinksHistory(
-        dateModified = dateModified,
         idDrink = idDrink,
+        dateModified = dateModified,
         strAlcoholic = strAlcoholic,
         strCategory = strCategory,
         strCreativeCommonsConfirmed = strCreativeCommonsConfirmed,

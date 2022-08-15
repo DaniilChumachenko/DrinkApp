@@ -1,5 +1,6 @@
 package com.chumachenko.core.data.repository
 
+import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.DrinksList
 import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.data.networking.CoreApi
@@ -22,13 +23,6 @@ class CoreRepository(
         } else {
             val responseData = coreApi.searchDrinks(query).toModel()
             searchCache.put(query, responseData)
-            database.drinksHistoryDao().deleteAll()
-            //TODO ПОДУМАТЬ МОЖЕТ ХРАНИТЬ ТЕ КОТОРЫЕ ОН ОТКРЫВАЛ
-            responseData.drinks.forEach {
-                database.drinksHistoryDao().insert(
-                    it.toEntity()
-                )
-            }
             responseData
         }
         return data
@@ -68,9 +62,16 @@ class CoreRepository(
         currentSearches.forEach {
             database.searchHistoryDao().delete(it)
         }
+        database.drinksHistoryDao().deleteAll()
     }
 
     suspend fun getLastDrinks() = database.drinksHistoryDao().getLast()
+
+    suspend fun saveOpenDrink(drink: Drink) {
+        database.drinksHistoryDao().insert(
+            drink.toEntity()
+        )
+    }
 
     private suspend fun setNewRecent(item: SearchResult) {
         database.searchHistoryDao().insert(

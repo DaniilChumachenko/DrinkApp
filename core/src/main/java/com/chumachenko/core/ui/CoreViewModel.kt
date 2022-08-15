@@ -33,12 +33,12 @@ class CoreViewModel(
         get() = _uiData
     val errorSearch: LiveData<Unit>
         get() = _errorSearch
-    val playAnimation: LiveData<Boolean>
-        get() = _playAnimation
+    val updateHint: LiveData<Unit>
+        get() = _updateHint
 
     private val _uiData = MutableLiveData<List<CoreCell>>()
     private val _errorSearch = SingleEventLiveData<Unit>()
-    private val _playAnimation = MutableLiveData<Boolean>()
+    private val _updateHint = SingleEventLiveData<Unit>()
 
     private val queryChannel = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 0)
 
@@ -57,14 +57,16 @@ class CoreViewModel(
     fun setupOnCreateMethod() {
         observeQuery()
         setRecentSearchData()
-        lastDrinks()
-        //TODO добавить последний запрос, ресенты
     }
 
     private fun lastDrinks() {
         uiScope.launch {
             val drinks = coreInteractor.getLastDrinks()
-            getDrinksList(drinks.reversed().map { it.toDrinkModel() })
+            if (drinks.isNotEmpty()) {
+                getDrinksList(drinks.reversed().map { it.toDrinkModel() })
+            } else {
+                showStartItem()
+            }
         }
     }
 
@@ -94,16 +96,13 @@ class CoreViewModel(
 
         if (networkUtils.isOnline()) {
             searchJob = (uiScope + searchErrorHandler).launch {
-                _playAnimation.value = true
                 val drinks = coreInteractor.searchDrinks(searchQuery)
-                preferencesManager.lastQuery = searchQuery
                 if (drinks.drinks.isEmpty()) {
                     animate = false
                     showEmptyItem()
                 } else {
                     animate = true
                     getDrinksList(drinks.drinks)
-                    _playAnimation.value = false
                 }
                 showProgress.value = false
             }
@@ -144,29 +143,40 @@ class CoreViewModel(
 
     fun setRecentSearchData() {
         uiScope.launch {
+            setShimmers()
+            val drinks = coreInteractor.getLastDrinks()
             val recent = coreInteractor.getRecentSearches()
+            val list = arrayListOf<CoreCell>()
+            list.add(CoreCell.Space)
             if (recent.isNotEmpty()) {
-                _uiData.value = arrayListOf<CoreCell>().apply {
-                    add(CoreCell.Space)
-                    (recent as ArrayList<SearchResult>).apply {
-                        add(0, SearchResult("Recent search: "))
-                    }
-                    add(CoreCell.Recent(recent))
-                    add(CoreCell.Start)
+                (recent as ArrayList<SearchResult>).apply {
+                    add(0, SearchResult("Recent search: "))
+                }
+                list.add(CoreCell.Recent(recent))
+            }
+            if (drinks.isNotEmpty()) {
+                drinks.forEach {
+                    list.add(
+                        CoreCell.Item(
+                            it.toDrinkModel(),
+                            ingredients = collectIngredients(it.toDrinkModel())
+                        )
+                    )
                 }
             } else {
-                showStartItem()
+                list.add(CoreCell.Start)
             }
+            _uiData.value = list
         }
     }
 
     fun setShimmers() {
         _uiData.value = arrayListOf<CoreCell>().apply {
             add(CoreCell.Space)
-            add(CoreCell.Skeleton)
-            add(CoreCell.Skeleton)
-            add(CoreCell.Skeleton)
-            add(CoreCell.Skeleton)
+            add(CoreCell.Shimmer)
+            add(CoreCell.Shimmer)
+            add(CoreCell.Shimmer)
+            add(CoreCell.Shimmer)
         }
     }
 
@@ -185,17 +195,28 @@ class CoreViewModel(
     }
 
     fun showStartItem() {
-        _uiData.value = arrayListOf<CoreCell>().apply { add(CoreCell.Start) }
+        _uiData.value = arrayListOf<CoreCell>().apply {
+            add(CoreCell.Space)
+            add(CoreCell.Start)
+        }
     }
 
     fun showEmptyItem() {
-        _uiData.value = arrayListOf<CoreCell.Empty>().apply { add(CoreCell.Empty) }
+        _uiData.value = arrayListOf<CoreCell>().apply {
+            add(CoreCell.Space)
+            add(CoreCell.Empty)
+        }
     }
 
-    fun saveSearchItem(item: SearchResult) {
+    fun saveSearchItem(item: SearchResult, drink: Drink) {
         uiScope.launch {
             try {
-                coreInteractor.addRecentSearch(item)
+                if (item.title != "") {
+                    coreInteractor.addRecentSearch(item)
+                    preferencesManager.lastQuery = drink.strDrink
+                    _updateHint.value = Unit
+                    coreInteractor.saveOpenDrink(drink)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -204,8 +225,8 @@ class CoreViewModel(
 
     fun recentClear() {
         uiScope.launch {
-            showStartItem()
             coreInteractor.clearRecentSearch()
+            lastDrinks()
         }
     }
 }

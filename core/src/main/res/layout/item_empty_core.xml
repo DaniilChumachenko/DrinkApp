@@ -21,7 +21,7 @@
         android:id="@+id/startCoreLottie"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_marginTop="135dp"
+        android:layout_marginTop="65dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

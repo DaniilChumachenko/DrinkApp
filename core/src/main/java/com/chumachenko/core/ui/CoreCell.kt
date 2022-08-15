@@ -20,5 +20,5 @@ sealed class CoreCell {
 
     object Space : CoreCell()
 
-    object Skeleton : CoreCell()
+    object Shimmer : CoreCell()
 }

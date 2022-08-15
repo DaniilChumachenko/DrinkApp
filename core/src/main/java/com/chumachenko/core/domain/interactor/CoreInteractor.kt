@@ -1,5 +1,6 @@
 package com.chumachenko.core.domain.interactor
 
+import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.data.repository.CoreRepository
 
@@ -24,4 +25,8 @@ class CoreInteractor(
 
     suspend fun getLastDrinks() =
         repository.getLastDrinks()
+
+    suspend fun saveOpenDrink(drink: Drink) {
+        repository.saveOpenDrink(drink)
+    }
 }

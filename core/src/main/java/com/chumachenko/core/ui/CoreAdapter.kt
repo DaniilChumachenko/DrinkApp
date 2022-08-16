@@ -1,9 +1,9 @@
 package com.chumachenko.core.ui
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.*
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -11,8 +11,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.chumachenko.core.R
 import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.SearchResult
@@ -156,6 +160,28 @@ class CoreAdapter(
                         CenterCrop(),
                         RoundedCorners(dpToPixel(8, itemView.context).toInt())
                     )
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            drinkLoader.isVisible = false
+                            drinkImage.isVisible = true
+                            return false
+                        }
+                    })
                     .into(drinkImage)
                 drinkTitle.text = item.strDrink
                 drinkSubTitle.text = if (item.strInstructions == "") {

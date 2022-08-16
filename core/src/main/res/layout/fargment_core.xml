@@ -50,16 +50,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topInset" />
 
-        <ImageView
-            android:id="@+id/coreFilters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="20dp"
-            android:src="@drawable/ic_filters"
-            app:layout_constraintBottom_toBottomOf="@+id/coreTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topInset" />
-
         <include
             android:id="@+id/searchField"
             layout="@layout/item_search"

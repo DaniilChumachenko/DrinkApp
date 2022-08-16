@@ -6,20 +6,12 @@ import com.chumachenko.core.data.storage.cache.SearchCache
 import com.chumachenko.core.domain.interactor.CoreInteractor
 import com.chumachenko.info.domain.interactor.InfoInteractor
 import com.chumachenko.core.ui.CoreViewModel
-import com.chumachenko.drinkapp.app.domain.interactor.AppInteractor
-import com.chumachenko.drinkapp.app.data.repository.AppRepository
-import com.chumachenko.drinkapp.app.ui.AppViewModel
 import com.chumachenko.info.ui.InfoViewModel
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val screenModule = module {
-
-    //App
-    factory { AppRepository(get()) }
-    factory { AppInteractor(get()) }
-    viewModel { AppViewModel(get()) }
 
     //Core
     factory { CoreRepository(get(), get(), get()) }

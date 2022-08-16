@@ -13,7 +13,7 @@ fun dpToPixel(dp: Int, context: Context): Float {
 fun RecyclerView.getCurrentPosition(): Int =
     (this.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
-public fun <T> List<T>.second(): T {
+fun <T> List<T>.second(): T {
     if (isEmpty())
         throw NoSuchElementException("List is empty.")
     if (size < 1)

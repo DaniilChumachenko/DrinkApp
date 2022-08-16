@@ -16,7 +16,6 @@ import com.chumachenko.core.extensions.dpToPixel
 import com.chumachenko.core.ui.CoreFragment
 import com.chumachenko.drinkapp.R
 import com.chumachenko.drinkapp.databinding.ActivityMainBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AppActivity : AppCompatActivity(), InsetHolder {
 
@@ -30,7 +29,6 @@ class AppActivity : AppCompatActivity(), InsetHolder {
     private var isWindowInsetSet = false
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel by viewModel<AppViewModel>()
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(INSET_TOP, _insetTop)
@@ -43,7 +41,6 @@ class AppActivity : AppCompatActivity(), InsetHolder {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        lifecycle.addObserver(viewModel)
 
         savedInstanceState?.apply {
             _insetTop = getInt(INSET_TOP)
@@ -91,7 +88,6 @@ class AppActivity : AppCompatActivity(), InsetHolder {
 
                     if (savedInstanceState == null) startCoreFragment()
                 }
-
                 insets
             }
         }

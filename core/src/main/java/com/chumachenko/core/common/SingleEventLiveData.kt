@@ -19,9 +19,4 @@ class SingleEventLiveData<T> : MutableLiveData<T>() {
             value = null
         })
     }
-
-    @MainThread
-    fun sendAction(data: T) {
-        value = data
-    }
 }

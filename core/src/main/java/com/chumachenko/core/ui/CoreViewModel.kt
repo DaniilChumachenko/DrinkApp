@@ -12,10 +12,13 @@ import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.data.storage.DrinksPreferencesManager
 import com.chumachenko.core.domain.interactor.CoreInteractor
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 
 class CoreViewModel(
     private val coreInteractor: CoreInteractor,
@@ -141,6 +144,7 @@ class CoreViewModel(
                 showProgress.value = false
             }
         } else {
+            showEmptyItem()
             _errorSearch.value = Unit
         }
     }

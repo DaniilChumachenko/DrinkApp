@@ -109,8 +109,8 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
 
     private fun initViews() = binding.apply {
         searchField.searchInput.requestFocus()
-        //TODO ПОДУМАТЬ КАК МОЖЕТ ЧЕ В ТЕКСТЕ СДЕЛАТЬ
-        searchField.searchInput.hint = viewModel.lastQuery
+        if (viewModel.lastQuery != "")
+            searchField.searchInput.hint = viewModel.lastQuery
         showKeyboard(searchField.searchInput)
     }
 
@@ -125,7 +125,6 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
             coreAdapter.setData(it)
         }
         errorSearch.observe(viewLifecycleOwner) {
-            viewModel.showEmptyItem()
             drinksSnackbar(binding.root)
         }
         updateHint.observe(viewLifecycleOwner) {
@@ -159,6 +158,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
     override fun onItemClick(drink: Drink) {
         router.openInfoScreen(childFragmentManager, drink)
         viewModel.saveSearchItem(SearchResult(viewModel.searchQuery), drink)
+        hideKeyboard(binding.root)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 

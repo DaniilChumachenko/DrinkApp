@@ -1,9 +1,7 @@
 package com.chumachenko.core.domain.interactor
 
-import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.data.repository.CoreRepository
-import com.chumachenko.core.data.storage.database.entity.DrinksHistory
 
 class CoreInteractor(
     private val repository: CoreRepository

@@ -11,27 +11,6 @@ import com.chumachenko.info.ui.InfoFragment
 
 class Application : Application(), Router {
 
-    private fun replaceFragment(
-        containerViewId: Int,
-        fragmentManager: FragmentManager,
-        fragment: Fragment,
-        transition: Int
-    ) {
-        val transaction = fragmentManager
-            .beginTransaction()
-            .replace(
-                containerViewId,
-                fragment,
-                fragment.javaClass.simpleName
-            )
-            .addToBackStack(fragment.javaClass.simpleName)
-            .setTransition(transition)
-
-        if (!fragmentManager.isStateSaved) {
-            transaction.commit()
-        }
-    }
-
     private fun addFragment(
         containerViewId: Int,
         fragmentManager: FragmentManager,

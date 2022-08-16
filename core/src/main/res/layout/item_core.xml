@@ -21,6 +21,15 @@
             android:id="@+id/drinkImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/drinkLoader"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/bg_shimmer_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

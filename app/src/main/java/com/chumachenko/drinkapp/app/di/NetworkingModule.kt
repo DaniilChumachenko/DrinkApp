@@ -1,6 +1,5 @@
 package com.chumachenko.drinkapp.app.di
 
-import com.chumachenko.core.data.networking.AppApi
 import com.chumachenko.core.data.networking.CoreApi
 import com.chumachenko.core.data.networking.InfoApi
 import com.chumachenko.drinkapp.BuildConfig.BASE_URL
@@ -35,7 +34,6 @@ val networkingModule = module {
             .build()
     }
 
-    single { provideApi<AppApi>(get()) }
     single { provideApi<CoreApi>(get()) }
     single { provideApi<InfoApi>(get()) }
 

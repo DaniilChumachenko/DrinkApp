@@ -7,11 +7,4 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main_dark">#020210</color>
-    <color name="second_dark">#1B1B28</color>
-    <color name="main_gray">#803C3C3E</color>
-    <color name="ingredients_color">#e49429</color>
-    <color name="screenBackground">#FFFFFFFF</color>
-    <color name="shimmerColor">#EEEEEE</color>
-    <color name="bsBackground">#66000000</color>
 </resources>

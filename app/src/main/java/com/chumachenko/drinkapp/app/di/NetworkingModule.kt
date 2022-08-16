@@ -2,6 +2,7 @@ package com.chumachenko.drinkapp.app.di
 
 import com.chumachenko.core.data.networking.AppApi
 import com.chumachenko.core.data.networking.CoreApi
+import com.chumachenko.core.data.networking.InfoApi
 import com.chumachenko.drinkapp.BuildConfig.BASE_URL
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -36,6 +37,7 @@ val networkingModule = module {
 
     single { provideApi<AppApi>(get()) }
     single { provideApi<CoreApi>(get()) }
+    single { provideApi<InfoApi>(get()) }
 
 }
 

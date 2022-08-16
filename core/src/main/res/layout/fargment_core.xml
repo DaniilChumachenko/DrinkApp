@@ -1,99 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/screenBackground">
+    android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/topInset"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="@color/screenBackground">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="6dp"
-        android:src="@drawable/ic_logo_drinks"
-        app:layout_constraintBottom_toBottomOf="@+id/coreTitle"
-        app:layout_constraintEnd_toStartOf="@+id/coreTitle"
-        app:layout_constraintTop_toBottomOf="@+id/topInset" />
+        <View
+            android:id="@+id/topInset"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/coreTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/toolbar_height"
-        android:layout_marginStart="30dp"
-        android:fontFamily="@font/falling_sky_bold"
-        android:gravity="center"
-        android:text="@string/core_title"
-        android:textColor="@color/main_dark"
-        android:textSize="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topInset" />
+        <View
+            android:id="@+id/bottomSheetBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@color/bsBackground"
+            android:elevation="10dp"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/coreFilters"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="20dp"
-        android:src="@drawable/ic_filters"
-        app:layout_constraintBottom_toBottomOf="@+id/coreTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topInset" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/ic_logo_drinks"
+            app:layout_constraintBottom_toBottomOf="@+id/coreTitle"
+            app:layout_constraintEnd_toStartOf="@+id/coreTitle"
+            app:layout_constraintTop_toBottomOf="@+id/topInset" />
 
-    <include
-        android:id="@+id/searchField"
-        layout="@layout/item_search"
+        <TextView
+            android:id="@+id/coreTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/toolbar_height"
+            android:layout_marginStart="30dp"
+            android:fontFamily="@font/falling_sky_bold"
+            android:gravity="center"
+            android:text="@string/core_title"
+            android:textColor="@color/main_dark"
+            android:textSize="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topInset" />
+
+        <ImageView
+            android:id="@+id/coreFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="20dp"
+            android:src="@drawable/ic_filters"
+            app:layout_constraintBottom_toBottomOf="@+id/coreTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topInset" />
+
+        <include
+            android:id="@+id/searchField"
+            layout="@layout/item_search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/core_search_height"
+            android:layout_margin="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coreTitle" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/drinksRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coreTitle" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/scrollUpList"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:elevation="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/scroll_up_animation" />
+
+        <ImageView
+            android:id="@+id/scrollUpListBg"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:paddingBottom="0.6dp"
+            android:src="@drawable/bg_scroll_up"
+            app:layout_constraintBottom_toBottomOf="@+id/scrollUpList"
+            app:layout_constraintEnd_toEndOf="@+id/scrollUpList"
+            app:layout_constraintStart_toStartOf="@+id/scrollUpList"
+            app:layout_constraintTop_toTopOf="@+id/scrollUpList" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/scrollUpGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="scrollUpList,scrollUpListBg" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
-        android:layout_margin="7dp"
-        android:layout_height="@dimen/core_search_height"
-        app:layout_constraintTop_toBottomOf="@+id/coreTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/drinksRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coreTitle" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/scrollUpList"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:elevation="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/scroll_up_animation" />
-
-    <ImageView
-        android:id="@+id/scrollUpListBg"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:paddingBottom="0.6dp"
-        android:src="@drawable/bg_scroll_up"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollUpList"
-        app:layout_constraintEnd_toEndOf="@+id/scrollUpList"
-        app:layout_constraintStart_toStartOf="@+id/scrollUpList"
-        app:layout_constraintTop_toTopOf="@+id/scrollUpList" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/scrollUpGroup"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="scrollUpList,scrollUpListBg" />
+        android:elevation="10dp"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@id/bottomSheetContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

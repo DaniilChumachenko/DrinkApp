@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">info</string>
+    <string name="title">Title</string>
+    <string name="drink_name">Drink name:</string>
+    <string name="drink_instruction">Instruction to drink:</string>
+    <string name="drink_category">Category:</string>
+    <string name="drink_alcoholic">Alcoholic:</string>
+    <string name="drink_glass">Glass:</string>
+    <string name="drink_ingredients">Ingredients:</string>
+</resources>

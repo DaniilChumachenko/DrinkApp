@@ -1,3 +1,4 @@
 rootProject.name = "DrinkApp"
 include ':app'
 include ':core'
+include ':info'

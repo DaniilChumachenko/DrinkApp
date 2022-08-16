@@ -75,6 +75,7 @@ android {
 
 dependencies {
     api project(path: ':core')
+    api project(path: ':info')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

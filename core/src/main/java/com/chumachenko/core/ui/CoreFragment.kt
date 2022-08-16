@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.RelativeLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.chumachenko.core.extensions.getCurrentPosition
 import com.chumachenko.core.extensions.second
 import com.chumachenko.core.extensions.setConstraintStatusBarHeight
 import com.chumachenko.core.extensions.viewBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClickListener,
@@ -24,7 +26,8 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
 
     private val viewModel by viewModel<CoreViewModel>()
     private val binding by viewBinding(FargmentCoreBinding::bind)
-    lateinit var adapter: CoreAdapter
+    lateinit var coreAdapter: CoreAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<RelativeLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +42,53 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         initAdapter()
         initListeners()
         initViews()
+        configureBottomSheet()
     }
 
     override fun onResume() {
         super.onResume()
         binding.searchField.searchInput.addTextChangedListener(this)
+    }
+
+    private fun configureBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
+        bottomSheetBehavior.skipCollapsed = true
+        bottomSheetBehavior.halfExpandedRatio = 0.25f
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.isFitToContents = false
+        bottomSheetBehavior.expandedOffset =
+            resources.getDimension(R.dimen.core_drink_height).toInt()
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.bottomSheetBg.animate().alpha(0.1f)
+                        binding.bottomSheetBg.isVisible = false
+                        hideKeyboard(binding.root)
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        binding.bottomSheetBg.animate().alpha(1f)
+                        binding.bottomSheetBg.isVisible = true
+                    }
+                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                        binding.bottomSheetBg.animate().alpha(0.1f)
+                        binding.bottomSheetBg.isVisible = false
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
     }
 
     private fun initListeners() = binding.apply {
@@ -76,7 +121,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
                 binding.searchField.searchLottieAnimation.resumeAnimation()
             else
                 binding.searchField.searchLottieAnimation.pauseAnimation()
-            adapter.setData(it)
+            coreAdapter.setData(it)
         }
         errorSearch.observe(viewLifecycleOwner) {
             viewModel.showEmptyItem()
@@ -87,18 +132,17 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         }
     }
 
-    private fun initAdapter() {
-        binding.drinksRecyclerView.let {
-            it.setHasFixedSize(true)
-            it.itemAnimator = null
-            val manager = LinearLayoutManager(context)
-            it.layoutManager = manager
-            adapter = CoreAdapter(
-                this
-            )
-            it.adapter = adapter
-        }
-        binding.drinksRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    private fun initAdapter() = binding.drinksRecyclerView.apply {
+        setHasFixedSize(true)
+        itemAnimator = null
+        val manager = LinearLayoutManager(context)
+        layoutManager = manager
+        coreAdapter = CoreAdapter(
+            this@CoreFragment
+        )
+        adapter = coreAdapter
+
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy != 0 && keyboardStatus)
@@ -108,8 +152,10 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         })
     }
 
-    override fun onItemClick(item: Drink) {
-        viewModel.saveSearchItem(SearchResult(viewModel.searchQuery), item)
+    override fun onItemClick(drink: Drink) {
+        router.openInfoScreen(childFragmentManager, drink)
+        viewModel.saveSearchItem(SearchResult(viewModel.searchQuery), drink)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun onIngredientsClick(ingredient: String) {

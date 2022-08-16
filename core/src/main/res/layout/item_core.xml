@@ -11,15 +11,16 @@
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:padding="15dp">
 
         <ImageView
             android:id="@+id/drinkImage"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,24 +48,11 @@
             android:maxLines="3"
             android:textColor="@color/second_dark"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/ingredientsLayout"
+            app:layout_constraintBottom_toBottomOf="@+id/drinkImage"
             app:layout_constraintEnd_toEndOf="@+id/drinkTitle"
             app:layout_constraintStart_toStartOf="@+id/drinkTitle"
             app:layout_constraintTop_toBottomOf="@+id/drinkTitle"
             tools:text="sdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasdasdadadasdadasda" />
-
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/ingredientsLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:alignContent="stretch"
-            app:alignItems="stretch"
-            app:flexWrap="wrap"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/drinkSubTitle"
-            app:layout_constraintStart_toStartOf="@+id/drinkSubTitle"
-            app:layout_constraintTop_toBottomOf="@+id/drinkSubTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

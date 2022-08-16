@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.chumachenko.core.common.Router
+import com.chumachenko.core.data.model.Drink
 import com.chumachenko.drinkapp.R
+import com.chumachenko.info.ui.InfoFragment
 
 class Application : Application(), Router {
 
@@ -51,7 +53,30 @@ class Application : Application(), Router {
         }
     }
 
-    override fun openSearchScreen(fragmentManager: FragmentManager) {
+    private fun addBottomSheet(
+        fragmentManager: FragmentManager,
+        fragment: Fragment,
+        transition: Int
+    ) {
+        val transaction = fragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.bottomSheetContainer,
+                fragment
+            )
+            .addToBackStack(fragment.javaClass.simpleName)
+            .setTransition(transition)
 
+        if (!fragmentManager.isStateSaved) {
+            transaction.commit()
+        }
+    }
+
+    override fun openInfoScreen(fragmentManager: FragmentManager, drink: Drink) {
+        addBottomSheet(
+            fragmentManager,
+            InfoFragment.newInstance(drink),
+            FragmentTransaction.TRANSIT_FRAGMENT_FADE
+        )
     }
 }

@@ -6,8 +6,7 @@ import com.chumachenko.core.data.model.SearchResult
 sealed class CoreCell {
 
     data class Item(
-        val item: Drink,
-        val ingredients: List<String> = listOf(),
+        val item: Drink
     ) : CoreCell()
 
     data class Recent(

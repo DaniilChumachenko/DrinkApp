@@ -119,27 +119,27 @@ class CoreViewModel(
                 _uiData.value = arrayListOf<CoreCell>().apply {
                     add(CoreCell.Space)
                     drinks.forEach {
-                        add(CoreCell.Item(it, ingredients = collectIngredients(it)))
+                        add(CoreCell.Item(it))
                     }
                 }
             }
         }
     }
 
-    private fun collectIngredients(it: Drink): ArrayList<String> = arrayListOf<String>().apply {
-        if (it.strIngredient1 != "")
-            add(it.strIngredient1)
-        if (it.strIngredient2 != "")
-            add(it.strIngredient2)
-        if (it.strIngredient3 != "")
-            add(it.strIngredient3)
-        if (it.strIngredient4 != "")
-            add(it.strIngredient4)
-        if (it.strIngredient5 != "")
-            add(it.strIngredient5)
-        if (it.strIngredient6 != "")
-            add(it.strIngredient6)
-    }
+//    private fun collectIngredients(it: Drink): ArrayList<String> = arrayListOf<String>().apply {
+//        if (it.strIngredient1 != "")
+//            add(it.strIngredient1)
+//        if (it.strIngredient2 != "")
+//            add(it.strIngredient2)
+//        if (it.strIngredient3 != "")
+//            add(it.strIngredient3)
+//        if (it.strIngredient4 != "")
+//            add(it.strIngredient4)
+//        if (it.strIngredient5 != "")
+//            add(it.strIngredient5)
+//        if (it.strIngredient6 != "")
+//            add(it.strIngredient6)
+//    }
 
     fun setRecentSearchData() {
         uiScope.launch {
@@ -158,8 +158,7 @@ class CoreViewModel(
                 drinks.forEach {
                     list.add(
                         CoreCell.Item(
-                            it.toDrinkModel(),
-                            ingredients = collectIngredients(it.toDrinkModel())
+                            it.toDrinkModel()
                         )
                     )
                 }

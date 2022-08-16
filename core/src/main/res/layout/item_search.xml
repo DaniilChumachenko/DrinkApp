@@ -38,7 +38,7 @@
             android:autofillHints="@string/lets_go_find_something_to_drink"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:digits="0123456789qwertyuiopasdfghjklzxcvbnm.-/&amp;"
+            android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.-/&amp;"
             android:focusable="true"
             android:fontFamily="@font/falling_sky_medium"
             android:hint="@string/lets_go_find_something_to_drink"

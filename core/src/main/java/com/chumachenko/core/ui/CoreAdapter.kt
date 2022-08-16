@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -81,8 +83,7 @@ class CoreAdapter(
         when (holder) {
             is ItemViewHolder -> holder.bind(
                 listener,
-                (cells[position] as CoreCell.Item).item,
-                (cells[position] as CoreCell.Item).ingredients
+                (cells[position] as CoreCell.Item).item
             )
             is RecentViewHolder -> holder.bind(
                 listener,
@@ -146,11 +147,9 @@ class CoreAdapter(
 
         fun bind(
             listener: CoreClickListener,
-            item: Drink,
-            ingredients: List<String>
+            item: Drink
         ) {
             binding.apply {
-
                 Glide.with(itemView.context)
                     .load(item.strDrinkThumb)
                     .error(R.drawable.bg_shimmer_icon)
@@ -159,40 +158,15 @@ class CoreAdapter(
                         RoundedCorners(dpToPixel(8, itemView.context).toInt())
                     )
                     .into(drinkImage)
-
                 drinkTitle.text = item.strDrink
-                drinkSubTitle.text = item.strInstructions
-                displayIngredients(ingredients, listener)
+                drinkSubTitle.text = if (item.strInstructions == "") {
+                    itemView.context.getString(R.string.tap_to_see_more)
+                } else {
+                    item.strInstructions
+                }
                 root.setOnClickListener {
                     listener.onItemClick(item)
                 }
-            }
-        }
-
-        private fun displayIngredients(ingredients: List<String>, listener: CoreClickListener) {
-            binding.ingredientsLayout.removeAllViewsInLayout()
-            for (name in ingredients) {
-                val view = TextView(itemView.context)
-                view.text = name
-                view.paint.isUnderlineText = true
-                view.setTextColor(
-                    ContextCompat.getColor(
-                        itemView.context,
-                        R.color.ingredients_color
-                    )
-                )
-                view.typeface = ResourcesCompat.getFont(itemView.context, R.font.falling_sky_small)
-                val params = FlexboxLayout.LayoutParams(
-                    FlexboxLayout.LayoutParams.WRAP_CONTENT,
-                    FlexboxLayout.LayoutParams.WRAP_CONTENT
-                )
-                params.topMargin = dpToPixel(3, view.context).toInt()
-                params.bottomMargin = 0
-                params.marginEnd = dpToPixel(5, view.context).toInt()
-                view.setOnClickListener {
-                    listener.onIngredientsClick(view.text.toString())
-                }
-                binding.ingredientsLayout.addView(view, params)
             }
         }
     }
@@ -260,10 +234,10 @@ class CoreAdapter(
                 if (it is CoreCell.Recent)
                     haveRecent = true
             }
-            if (!haveRecent){
+            if (!haveRecent) {
                 binding.arrowToSearch.isVisible = true
                 binding.arrowToSearch.playAnimation()
-            }else{
+            } else {
                 binding.arrowToSearch.cancelAnimation()
                 binding.arrowToSearch.isVisible = false
             }
@@ -275,7 +249,7 @@ class CoreAdapter(
     class SpaceViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     interface CoreClickListener {
-        fun onItemClick(item: Drink)
+        fun onItemClick(drink: Drink)
         fun onIngredientsClick(ingredient: String)
         fun onRecentClick(ingredient: String)
         fun onRecentClear()

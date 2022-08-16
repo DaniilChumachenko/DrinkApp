@@ -10,4 +10,7 @@ class InfoInteractor(
 
     suspend fun getDrinkById(drinkId: String) =
         repository.getDrinkById(drinkId).toModel()
+
+    suspend fun saveOpenDrink(drink: Drink) = repository.saveOpenDrink(drink)
+
 }

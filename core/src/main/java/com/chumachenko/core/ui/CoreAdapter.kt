@@ -3,9 +3,8 @@ package com.chumachenko.core.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.*
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -38,8 +37,8 @@ class CoreAdapter(
                         .inflate(R.layout.item_core, parent, false)
                 )
             }
-            VIEW_TYPE_SKELETON -> {
-                SkeletonViewHolder(
+            VIEW_TYPE_SHIMMER -> {
+                ShimmerViewHolder(
                     LayoutInflater
                         .from(parent.context)
                         .inflate(R.layout.item_shimmer_core, parent, false)
@@ -102,7 +101,7 @@ class CoreAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (cells[position]) {
             is CoreCell.Item -> VIEW_TYPE_ITEM
-            is CoreCell.Shimmer -> VIEW_TYPE_SKELETON
+            is CoreCell.Shimmer -> VIEW_TYPE_SHIMMER
             is CoreCell.Space -> VIEW_TYPE_SPACE
             is CoreCell.Start -> VIEW_TYPE_START
             is CoreCell.Empty -> VIEW_TYPE_EMPTY
@@ -217,7 +216,7 @@ class CoreAdapter(
         }
     }
 
-    class SkeletonViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    class ShimmerViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
@@ -250,7 +249,6 @@ class CoreAdapter(
 
     interface CoreClickListener {
         fun onItemClick(drink: Drink)
-        fun onIngredientsClick(ingredient: String)
         fun onRecentClick(ingredient: String)
         fun onRecentClear()
     }
@@ -258,7 +256,7 @@ class CoreAdapter(
     companion object {
         private const val VIEW_TYPE_ITEM = 1
         private const val VIEW_TYPE_SPACE = 2
-        private const val VIEW_TYPE_SKELETON = 3
+        private const val VIEW_TYPE_SHIMMER = 3
         private const val VIEW_TYPE_START = 4
         private const val VIEW_TYPE_EMPTY = 5
         private const val VIEW_TYPE_RECENT = 6

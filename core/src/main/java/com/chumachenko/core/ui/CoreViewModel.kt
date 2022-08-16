@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.chumachenko.core.common.NetworkUtils
 import com.chumachenko.core.common.SingleEventLiveData
 import com.chumachenko.core.common.base.BaseViewModel
+import com.chumachenko.core.common.notifier.AppNotifier
+import com.chumachenko.core.common.notifier.HideBottomSheetEvent
+import com.chumachenko.core.common.notifier.ShowIngredientsEvent
 import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.data.storage.DrinksPreferencesManager
@@ -18,10 +21,9 @@ class CoreViewModel(
     private val coreInteractor: CoreInteractor,
     private val networkUtils: NetworkUtils,
     private val preferencesManager: DrinksPreferencesManager,
+    private val appNotifier: AppNotifier
 ) : BaseViewModel() {
     var searchQuery: String = ""
-        private set
-    var animate: Boolean = false
         private set
     var clearSearchOn: Boolean = false
     val lastQuery: String
@@ -35,10 +37,13 @@ class CoreViewModel(
         get() = _errorSearch
     val updateHint: LiveData<Unit>
         get() = _updateHint
+    val hideBottomSheet: LiveData<Unit>
+        get() = _hideBottomSheet
 
     private val _uiData = MutableLiveData<List<CoreCell>>()
     private val _errorSearch = SingleEventLiveData<Unit>()
     private val _updateHint = SingleEventLiveData<Unit>()
+    private val _hideBottomSheet = SingleEventLiveData<Unit>()
 
     private val queryChannel = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 0)
 
@@ -56,7 +61,27 @@ class CoreViewModel(
 
     fun setupOnCreateMethod() {
         observeQuery()
+        observeEvents()
         setRecentSearchData()
+    }
+
+    private fun observeEvents() {
+        uiScope.launch {
+            appNotifier
+                .notifier
+                .collect { event ->
+                    when (event) {
+                        is ShowIngredientsEvent -> {
+                            findByIngredients(event.ingredient)
+                            _hideBottomSheet.value = Unit
+                        }
+                        is HideBottomSheetEvent -> {
+                            _hideBottomSheet.value = Unit
+                            _errorSearch.value = Unit
+                        }
+                    }
+                }
+        }
     }
 
     private fun lastDrinks() {
@@ -64,6 +89,17 @@ class CoreViewModel(
             val drinks = coreInteractor.getLastDrinks()
             if (drinks.isNotEmpty()) {
                 getDrinksList(drinks.reversed().map { it.toDrinkModel() })
+            } else {
+                showStartItem()
+            }
+        }
+    }
+
+    private fun findByIngredients(ingredient: String) {
+        uiScope.launch {
+            val drinks = coreInteractor.filterByIngredients(ingredient)
+            if (drinks.drinks.isNotEmpty()) {
+                getDrinksList(drinks.drinks)
             } else {
                 showStartItem()
             }
@@ -98,10 +134,8 @@ class CoreViewModel(
             searchJob = (uiScope + searchErrorHandler).launch {
                 val drinks = coreInteractor.searchDrinks(searchQuery)
                 if (drinks.drinks.isEmpty()) {
-                    animate = false
                     showEmptyItem()
                 } else {
-                    animate = true
                     getDrinksList(drinks.drinks)
                 }
                 showProgress.value = false
@@ -214,7 +248,6 @@ class CoreViewModel(
                     coreInteractor.addRecentSearch(item)
                     preferencesManager.lastQuery = drink.strDrink
                     _updateHint.value = Unit
-                    coreInteractor.saveOpenDrink(drink)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

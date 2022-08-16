@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chumachenko.core.R
@@ -130,11 +131,14 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         updateHint.observe(viewLifecycleOwner) {
             binding.searchField.searchInput.hint = viewModel.lastQuery
         }
+        hideBottomSheet.observe(viewLifecycleOwner) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
     }
 
     private fun initAdapter() = binding.drinksRecyclerView.apply {
         setHasFixedSize(true)
-        itemAnimator = null
+        itemAnimator = DefaultItemAnimator()
         val manager = LinearLayoutManager(context)
         layoutManager = manager
         coreAdapter = CoreAdapter(
@@ -156,10 +160,6 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         router.openInfoScreen(childFragmentManager, drink)
         viewModel.saveSearchItem(SearchResult(viewModel.searchQuery), drink)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    override fun onIngredientsClick(ingredient: String) {
-
     }
 
     override fun onRecentClick(ingredient: String) {

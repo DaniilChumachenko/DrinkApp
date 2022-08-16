@@ -1,13 +1,10 @@
 package com.chumachenko.core.data.repository
 
-import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.DrinksList
 import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.data.networking.CoreApi
-import com.chumachenko.core.data.storage.DrinksPreferencesManager
 import com.chumachenko.core.data.storage.cache.SearchCache
 import com.chumachenko.core.data.storage.database.DrinkDatabase
-import com.chumachenko.core.data.storage.database.entity.DrinksHistory
 import com.chumachenko.core.data.storage.database.entity.SearchHistory
 
 class CoreRepository(
@@ -28,14 +25,16 @@ class CoreRepository(
         return data
     }
 
+    suspend fun filterByIngredients(query: String): DrinksList =
+        coreApi.filterByIngredients(query).toModel()
 
-    suspend fun getRecentSearches(): List<SearchResult> {
-        return database.searchHistoryDao().getLast15().map {
+
+    suspend fun getRecentSearches(): List<SearchResult> =
+        database.searchHistoryDao().getLast15().map {
             SearchResult(
                 title = it.title
             )
         }
-    }
 
     suspend fun addRecentSearch(item: SearchResult) {
         val currentSearches = database.searchHistoryDao().getAll()
@@ -67,18 +66,10 @@ class CoreRepository(
 
     suspend fun getLastDrinks() = database.drinksHistoryDao().getLast()
 
-    suspend fun saveOpenDrink(drink: Drink) {
-        database.drinksHistoryDao().insert(
-            drink.toEntity()
+    private suspend fun setNewRecent(item: SearchResult) = database.searchHistoryDao().insert(
+        SearchHistory(
+            title = item.title,
+            savedAt = System.currentTimeMillis()
         )
-    }
-
-    private suspend fun setNewRecent(item: SearchResult) {
-        database.searchHistoryDao().insert(
-            SearchHistory(
-                title = item.title,
-                savedAt = System.currentTimeMillis()
-            )
-        )
-    }
+    )
 }

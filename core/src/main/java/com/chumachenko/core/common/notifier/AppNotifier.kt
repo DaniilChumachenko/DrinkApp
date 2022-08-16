@@ -10,6 +10,8 @@ class AppNotifier {
 
     val notifier: Flow<AppEvent> = channel.asSharedFlow()
 
-    suspend fun send(event: ForceUpdateEvent) = channel.emit(event)
+    suspend fun send(event: ShowIngredientsEvent) = channel.emit(event)
+
+    suspend fun send(event: HideBottomSheetEvent) = channel.emit(event)
 
 }

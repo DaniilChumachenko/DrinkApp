@@ -11,7 +11,7 @@ interface CoreApi {
     ): DrinksListResponse
 
     @GET("filter.php?")
-    suspend fun filterByAlcoholic(
+    suspend fun filterByIngredients(
         @Query("i") query: String
     ): DrinksListResponse
 

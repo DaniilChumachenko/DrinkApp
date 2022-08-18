@@ -1,8 +1,10 @@
 package com.chumachenko.core.data.repository
 
+import com.chumachenko.core.data.model.Drink
 import com.chumachenko.core.data.model.DrinksList
 import com.chumachenko.core.data.model.SearchResult
 import com.chumachenko.core.data.networking.CoreApi
+import com.chumachenko.core.data.response.DrinkResponse
 import com.chumachenko.core.data.storage.cache.SearchCache
 import com.chumachenko.core.data.storage.database.DrinkDatabase
 import com.chumachenko.core.data.storage.database.entity.SearchHistory
@@ -25,8 +27,13 @@ class CoreRepository(
         return data
     }
 
-    suspend fun filterByIngredients(query: String): DrinksList =
-        coreApi.filterByIngredients(query).toModel()
+    suspend fun filterByIngredients(query: String): DrinksList {
+        val drinksInfo = arrayListOf<Drink>()
+        coreApi.filterByIngredients(query).drinks.forEach {
+            drinksInfo.add(coreApi.getDrinkById(it.idDrink!!).drinks.first().toModel())
+        }
+        return DrinksList(drinksInfo)
+    }
 
 
     suspend fun getRecentSearches(): List<SearchResult> =

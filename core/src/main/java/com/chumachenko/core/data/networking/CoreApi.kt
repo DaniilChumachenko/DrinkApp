@@ -15,4 +15,10 @@ interface CoreApi {
         @Query("i") query: String
     ): DrinksListResponse
 
+    @GET("lookup.php?")
+    suspend fun getDrinkById(
+        @Query("i") drinkId: String
+    ): DrinksListResponse
+
+
 }

@@ -6,6 +6,7 @@ import com.chumachenko.core.data.networking.InfoApi
 import com.chumachenko.core.data.response.DrinkResponse
 import com.chumachenko.core.data.storage.cache.SearchCache
 import com.chumachenko.core.data.storage.database.DrinkDatabase
+import com.chumachenko.core.data.storage.database.entity.IngredientHistory
 import com.chumachenko.core.data.storage.database.entity.SearchHistory
 
 class InfoRepository(
@@ -18,5 +19,9 @@ class InfoRepository(
 
     suspend fun saveOpenDrink(drink: Drink) = database.drinksHistoryDao().insert(
         drink.toEntity()
+    )
+
+    suspend fun saveIngredient(ingredient: String) = database.ingredientHistoryDao().insert(
+        IngredientHistory(ingredient, System.currentTimeMillis())
     )
 }

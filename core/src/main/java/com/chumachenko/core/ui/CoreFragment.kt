@@ -100,6 +100,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         searchField.clearSearch.setOnClickListener {
             viewModel.clearSearchOn = true
             searchField.searchInput.text.clear()
+            hideKeyboard(binding.root)
         }
         searchField.root.setOnClickListener {
             searchField.searchInput.requestFocus()
@@ -116,7 +117,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
 
     private fun initObservers() = viewModel.apply {
         uiData.observe(viewLifecycleOwner) {
-            if (it.first() is CoreCell.Empty)
+            if (it.second() is CoreCell.Empty)
                 hideKeyboard(binding.root)
             if (it.second() is CoreCell.Shimmer)
                 binding.searchField.searchLottieAnimation.resumeAnimation()
@@ -128,7 +129,11 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
             drinksSnackbar(binding.root)
         }
         updateHint.observe(viewLifecycleOwner) {
-            binding.searchField.searchInput.hint = viewModel.lastQuery
+            binding.searchField.searchInput.hint = it
+        }
+        updateInput.observe(viewLifecycleOwner) {
+            binding.searchField.searchInput.setText(it)
+            binding.searchField.searchInput.setSelection(it.length)
         }
         hideBottomSheet.observe(viewLifecycleOwner) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -162,8 +167,9 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    override fun onRecentClick(ingredient: String) {
-        binding.searchField.searchInput.setText(ingredient)
+    override fun onRecentClick(recent: String) {
+        binding.searchField.searchInput.setText(recent)
+        binding.searchField.searchInput.setSelection(recent.length)
     }
 
     override fun onRecentClear() {
@@ -181,7 +187,7 @@ class CoreFragment : BaseFragment(R.layout.fargment_core), CoreAdapter.CoreClick
     }
 
     override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        if (text != null) {
+        if (text != null && text != "" && !viewModel.searchFromInfo) {
             viewModel.search(text.toString())
         }
     }

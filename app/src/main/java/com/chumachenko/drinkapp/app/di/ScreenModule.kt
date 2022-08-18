@@ -16,7 +16,7 @@ val screenModule = module {
     //Core
     factory { CoreRepository(get(), get(), get()) }
     factory { CoreInteractor(get()) }
-    viewModel { CoreViewModel(get(), get(), get(), get()) }
+    viewModel { CoreViewModel(get(), get(), get(), get(), get()) }
     single { SearchCache() }
 
     //Info

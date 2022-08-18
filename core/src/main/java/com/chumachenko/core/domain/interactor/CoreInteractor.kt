@@ -20,4 +20,6 @@ class CoreInteractor(
     suspend fun clearRecentSearch() = repository.clearRecentSearch()
 
     suspend fun getLastDrinks() = repository.getLastDrinks()
+
+    suspend fun getSavedIngredients(query: String) = repository.getSavedIngredients(query)
 }

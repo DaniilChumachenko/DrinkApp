@@ -35,7 +35,6 @@
             android:layout_gravity="center"
             android:layout_marginStart="5dp"
             android:layout_weight="1"
-            android:autofillHints="@string/lets_go_find_something_to_drink"
             android:background="@android:color/transparent"
             android:clickable="true"
             android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM.-/&amp;"

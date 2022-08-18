@@ -34,6 +34,24 @@ data class DrinkResponse(
     val strIngredient5: String?,
     @SerializedName("strIngredient6")
     val strIngredient6: String?,
+    @SerializedName("strIngredient7")
+    val strIngredient7: String?,
+    @SerializedName("strIngredient8")
+    val strIngredient8: String?,
+    @SerializedName("strIngredient9")
+    val strIngredient9: String?,
+    @SerializedName("strIngredient10")
+    val strIngredient10: String?,
+    @SerializedName("strIngredient11")
+    val strIngredient11: String?,
+    @SerializedName("strIngredient12")
+    val strIngredient12: String?,
+    @SerializedName("strIngredient13")
+    val strIngredient13: String?,
+    @SerializedName("strIngredient14")
+    val strIngredient14: String?,
+    @SerializedName("strIngredient15")
+    val strIngredient15: String?,
     @SerializedName("strGlass")
     val strGlass: String?,
     @SerializedName("strIBA")
@@ -64,6 +82,15 @@ data class DrinkResponse(
             strIngredient4 = strIngredient4 ?: "",
             strIngredient5 = strIngredient5 ?: "",
             strIngredient6 = strIngredient6 ?: "",
+            strIngredient7 = strIngredient7 ?: "",
+            strIngredient8 = strIngredient8 ?: "",
+            strIngredient9 = strIngredient9 ?: "",
+            strIngredient10 = strIngredient10 ?: "",
+            strIngredient11 = strIngredient11 ?: "",
+            strIngredient12 = strIngredient12 ?: "",
+            strIngredient13 = strIngredient13 ?: "",
+            strIngredient14 = strIngredient14 ?: "",
+            strIngredient15 = strIngredient15 ?: "",
             strGlass = strGlass ?: "",
             strIBA = strIBA ?: "",
             strImageAttribution = strImageAttribution ?: "",

@@ -144,10 +144,15 @@ class InfoAdapter(
             listener: InfoClickListener
         ) {
             binding.ingredientsLayout.removeAllViewsInLayout()
-            for (name in ingredients) {
+            ingredients.forEachIndexed { index, name ->
                 val view = TextView(itemView.context)
-                view.text = name
-                view.paint.isUnderlineText = true
+
+                when {
+                    index != ingredients.lastIndex -> view.text =
+                        name.plus(",")
+                    else -> view.text = name
+                }
+
                 view.setTextColor(
                     ContextCompat.getColor(
                         itemView.context,

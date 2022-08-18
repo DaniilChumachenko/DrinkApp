@@ -217,7 +217,7 @@ class CoreAdapter(
                     view.setTextColor(
                         ContextCompat.getColor(
                             itemView.context,
-                            R.color.main_gray
+                            R.color.ingredients_color
                         )
                     )
                     view.typeface =
@@ -231,7 +231,8 @@ class CoreAdapter(
                     params.marginEnd = dpToPixel(5, view.context).toInt()
 
                     view.setOnClickListener {
-                        listener.onRecentClick(drink.title)
+                        if (index != 0)
+                            listener.onRecentClick(drink.title)
                     }
                     recentLayout.addView(view, params)
                 }
@@ -275,7 +276,7 @@ class CoreAdapter(
 
     interface CoreClickListener {
         fun onItemClick(drink: Drink)
-        fun onRecentClick(ingredient: String)
+        fun onRecentClick(recent: String)
         fun onRecentClear()
     }
 

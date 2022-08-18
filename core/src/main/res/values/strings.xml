@@ -11,6 +11,6 @@
     <string name="error_sub_tittle">Please, check your internet connection!</string>
     <string name="error_tittle">Something went wrong!</string>
     <string name="recent_title">Recent words: %1$s,</string>
-    <string name="clear_recent">Clear recent</string>
+    <string name="clear_recent"><u>Clear recent</u></string>
     <string name="tap_to_see_more">Tap to see more..</string>
 </resources>

@@ -13,4 +13,6 @@ class InfoInteractor(
 
     suspend fun saveOpenDrink(drink: Drink) = repository.saveOpenDrink(drink)
 
+    suspend fun saveIngredient(ingredient: String) = repository.saveIngredient(ingredient)
+
 }

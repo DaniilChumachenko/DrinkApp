@@ -63,15 +63,16 @@ class CoreRepository(
         }
     }
 
-    suspend fun clearRecentSearch() {
-        val currentSearches = database.searchHistoryDao().getAll()
-        currentSearches.forEach {
-            database.searchHistoryDao().delete(it)
-        }
-        database.drinksHistoryDao().deleteAll()
+    suspend fun clearRecentSearch() = database.apply {
+        drinksHistoryDao().deleteAll()
+        searchHistoryDao().deleteAll()
+        ingredientHistoryDao().deleteAll()
     }
 
     suspend fun getLastDrinks() = database.drinksHistoryDao().getLast()
+
+    suspend fun getSavedIngredients(query: String) =
+        database.ingredientHistoryDao().getIngredientByQuery(query)
 
     private suspend fun setNewRecent(item: SearchResult) = database.searchHistoryDao().insert(
         SearchHistory(

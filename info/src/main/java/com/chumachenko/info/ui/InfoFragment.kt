@@ -20,7 +20,7 @@ class InfoFragment : BaseFragment(R.layout.fargment_info), InfoAdapter.InfoClick
         super.onCreate(savedInstanceState)
         lifecycle.addObserver(viewModel)
         viewModel.drink = requireArguments().getParcelable(ARG_DRINK_ITEM)!!
-        viewModel.getDrinkById(viewModel.drink.idDrink)
+        viewModel.getDrinkById(viewModel.drink)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

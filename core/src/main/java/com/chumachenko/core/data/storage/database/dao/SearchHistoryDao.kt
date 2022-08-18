@@ -12,6 +12,9 @@ interface SearchHistoryDao {
     @Query("SELECT * FROM search_history ORDER BY saved_at DESC LIMIT 15")
     suspend fun getLast15(): List<SearchHistory>
 
+    @Query("DELETE FROM search_history")
+    suspend fun deleteAll()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(searchHistory: SearchHistory)
 

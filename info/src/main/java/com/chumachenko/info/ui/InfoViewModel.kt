@@ -41,6 +41,8 @@ class InfoViewModel(
                 }
                 _uiData.value = InfoCell.Item(drinkInfo, collectIngredients(drinkInfo))
                 saveSearchItem(drinkInfo)
+            } else if (drink.strInstructions != "") {
+                _uiData.value = InfoCell.Item(drink, collectIngredients(drink))
             } else {
                 delay(1000)
                 showOpenInfoErrorNetwork()

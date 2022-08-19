@@ -97,7 +97,7 @@ class CoreViewModel(
     }
 
     private fun findByIngredients(ingredient: String) {
-        uiScope.launch {
+        (uiScope+searchErrorHandler).launch {
             setShimmers()
             val drinks = coreInteractor.filterByIngredients(ingredient)
             if (drinks.drinks.isNotEmpty()) {
@@ -201,6 +201,7 @@ class CoreViewModel(
     fun setShimmers() {
         _uiData.value = arrayListOf<CoreCell>().apply {
             add(CoreCell.Space)
+            add(CoreCell.Shimmer)
             add(CoreCell.Shimmer)
             add(CoreCell.Shimmer)
             add(CoreCell.Shimmer)

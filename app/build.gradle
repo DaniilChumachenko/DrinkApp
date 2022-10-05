@@ -26,15 +26,9 @@ android {
     productFlavors {
         prod {
             buildConfigField "String", "BASE_URL", "\"https://thecocktaildb.com/api/json/v1/1/\""
-//            buildConfigField "String", "SHARE_URL", "\"https://app.stritch.com/\""
-//            buildConfigField "String", "APPSFLYER_KEY", "\"hkXScmNvMoiXuPbK8DsaNB\""
-//            buildConfigField "String", "SEGMENT_KEY", "\"Gu4NDqZoimJocWv8H3PRvLYWZ7BM2qvk\""
         }
         develop {
             buildConfigField "String", "BASE_URL", "\"https://thecocktaildb.com/api/json/v1/1/\""
-//            buildConfigField "String", "SHARE_URL", "\"https://test.stritch.com/\""
-//            buildConfigField "String", "APPSFLYER_KEY", "\"hkXScmNvMoiXuPbK8DsaNB\""
-//            buildConfigField "String", "SEGMENT_KEY", "\"FArvw8nLwVXVH7FrL1UOOQksH6uffHd2\""
         }
     }
     
